@@ -7,7 +7,7 @@ android {
     ndkVersion '23.1.7779620'
     defaultConfig {
         applicationId "cn.kpkpkp"
-        minSdk 21
+        minSdk 24
         targetSdk 32
         versionCode 1
         versionName "1.0"

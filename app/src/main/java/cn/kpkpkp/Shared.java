@@ -18,11 +18,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Video.Media;
 import android.util.Log;
@@ -39,12 +42,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Enumeration;
 import java.util.Formatter;
 import java.util.zip.GZIPInputStream;
 
@@ -56,6 +65,32 @@ import static java.lang.Math.min;
 public class Shared {
 
     private static final String TAG = "";
+    private static final Object sLock = new Object();
+    private static Handler sUiThreadHandler;
+
+    public static Intent buildSharedIntent(Context context, File imageFile) {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        if (imageFile.getName().endsWith(".mp3"))
+            sharingIntent.setType("*/*");
+        else
+            sharingIntent.setType("video/mp4");
+        Uri uri = PublicFileProvider.getUriForFile(context, "psycho.euphoria.video.files", imageFile);
+        Log.e("B5aOx2", String.format("buildSharedIntent, %s", uri));
+        //        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+//        StrictMode.setVmPolicy(builder.build());
+        //sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+//        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(
+//                sharingIntent,
+//                PackageManager.MATCH_DEFAULT_ONLY
+//        );
+//        for (ResolveInfo r : resolveInfos) {
+//            context.grantUriPermission(r.activityInfo.packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//        }
+        return sharingIntent;
+
+
+    }
 
     public static void close(Closeable closeable) {
         if (closeable != null) {
@@ -80,6 +115,14 @@ public class Shared {
         while ((data = inStream.read()) != -1) {
             outStream.write(data);
         }
+    }
+
+    public static void createDirectoryIfNotExists(String path) {
+        File dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
     }
 
     public static Bitmap createVideoThumbnail(String filePath) {
@@ -137,6 +180,56 @@ public class Shared {
         return 0;
     }
 
+    public static String getDeviceIP(Context context) {
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        try {
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            int rawIp = wifiInfo.getIpAddress();
+            if (rawIp == 0) {
+                Method method = wifiManager.getClass().getDeclaredMethod("isWifiApEnabled");
+                method.setAccessible(true);
+                boolean isWifiApEnabled = (boolean) method.invoke(wifiManager);
+                if (isWifiApEnabled)
+                    return getWifiApIpAddress();
+                else
+                    return null;
+            }
+            //Log.e("B5aOx2", String.format("getDeviceIP, %s", wifiManager.getConnectionInfo().getSupplicantState().name()));
+            InetAddress inetAddress = intToInetAddress(rawIp);
+            return inetAddress.getHostAddress();
+        } catch (Exception e) {
+            Log.e("TAG", e.getMessage());
+            return null;
+        }
+    }
+
+    public static String getExternalStoragePath(Context context) {
+        StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+        Class<?> storageVolumeClazz = null;
+        try {
+            storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
+            Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
+            Method getPath = storageVolumeClazz.getMethod("getPath");
+            Method isRemovable = storageVolumeClazz.getMethod("isRemovable");
+            Object result = getVolumeList.invoke(mStorageManager);
+            if (result == null) return null;
+            final int length = Array.getLength(result);
+            for (int i = 0; i < length; i++) {
+                Object storageVolumeElement = Array.get(result, i);
+                String path = (String) getPath.invoke(storageVolumeElement);
+                Object removableObject = isRemovable.invoke(storageVolumeElement);
+                if (removableObject == null) return null;
+                boolean removable = (Boolean) removableObject;
+                if (removable) {
+                    return path;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static int getNavigationBarHeight(Context context, int orientation) {
         int id = context.getResources().getIdentifier(
                 orientation == Configuration.ORIENTATION_PORTRAIT ? "navigation_bar_height" : "navigation_bar_height_landscape",
@@ -169,6 +262,20 @@ public class Shared {
         return null;
     }
 
+    public static Handler getUiThreadHandler() {
+        boolean createdHandler = false;
+        synchronized (sLock) {
+            if (sUiThreadHandler == null) {
+                sUiThreadHandler = new Handler(Looper.getMainLooper());
+                createdHandler = true;
+            }
+        }
+        if (createdHandler) {
+            //TraceEvent.onUiThreadReady();
+        }
+        return sUiThreadHandler;
+    }
+
     public static String getValidFileName(String filename) {
         char[] invalidFileNameChars = {'\"', '<', '>', '|', '\0', (char) 1, (char) 2, (char) 3, (char) 4, (char) 5, (char) 6, (char) 7, (char) 8, (char) 9, (char) 10, (char) 11, (char) 12, (char) 13, (char) 14, (char) 15, (char) 16, (char) 17, (char) 18, (char) 19, (char) 20, (char) 21, (char) 22, (char) 23, (char) 24, (char) 25, (char) 26, (char) 27, (char) 28, (char) 29, (char) 30, (char) 31, ':', '*', '?', '\\', '/'};
         char[] buf = filename.toCharArray();
@@ -179,6 +286,27 @@ public class Shared {
             }
         }
         return new String(buf);
+    }
+
+    public static String getWifiApIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en
+                    .hasMoreElements(); ) {
+                NetworkInterface intf = en.nextElement();
+                if (intf.getName().contains("wlan")) {
+                    for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr
+                            .hasMoreElements(); ) {
+                        InetAddress inetAddress = enumIpAddr.nextElement();
+                        if (!inetAddress.isLoopbackAddress()
+                                && (inetAddress.getAddress().length == 4)) {
+                            return inetAddress.getHostAddress();
+                        }
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+        }
+        return null;
     }
 
     public static void hideSystemUI(Activity activity) {
@@ -192,6 +320,18 @@ public class Shared {
         activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         activity.getActionBar().hide();
+    }
+
+    public static InetAddress intToInetAddress(int hostAddress) {
+        byte[] addressBytes = {(byte) (0xff & hostAddress),
+                (byte) (0xff & (hostAddress >> 8)),
+                (byte) (0xff & (hostAddress >> 16)),
+                (byte) (0xff & (hostAddress >> 24))};
+        try {
+            return InetAddress.getByAddress(addressBytes);
+        } catch (UnknownHostException e) {
+            throw new AssertionError();
+        }
     }
 
     public static String md5(String md5) {
@@ -301,6 +441,18 @@ public class Shared {
         return target;
     }
 
+    public static void runOnUiThread(Runnable r) {
+        if (runningOnUiThread()) {
+            r.run();
+        } else {
+            getUiThreadHandler().post(r);
+        }
+    }
+
+    public static boolean runningOnUiThread() {
+        return getUiThreadHandler().getLooper() == Looper.myLooper();
+    }
+
     public static void setText(Context context, String string) {
         ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboardManager.setPrimaryClip(ClipData.newPlainText(null, string));
@@ -370,68 +522,10 @@ public class Shared {
         }
         return config;
     }
-
     /*
 https://android.googlesource.com/platform/tools/tradefederation/+/ae241fc/src/com/android/tradefed/util/StreamUtil.java
      */
     public interface Listener {
         void onSuccess(String value);
     }
-
-    public static Intent buildSharedIntent(Context context, File imageFile) {
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        if (imageFile.getName().endsWith(".mp3"))
-            sharingIntent.setType("*/*");
-        else
-            sharingIntent.setType("video/mp4");
-        Uri uri = PublicFileProvider.getUriForFile(context, "psycho.euphoria.video.files", imageFile);
-        Log.e("B5aOx2", String.format("buildSharedIntent, %s", uri));
-        //        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-//        StrictMode.setVmPolicy(builder.build());
-        //sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
-//        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(
-//                sharingIntent,
-//                PackageManager.MATCH_DEFAULT_ONLY
-//        );
-//        for (ResolveInfo r : resolveInfos) {
-//            context.grantUriPermission(r.activityInfo.packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        }
-        return sharingIntent;
-
-
-    }
-
-    public static void createDirectoryIfNotExists(String path) {
-        File dir = new File(path);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-    }
-    public static void runOnUiThread(Runnable r) {
-        if (runningOnUiThread()) {
-            r.run();
-        } else {
-            getUiThreadHandler().post(r);
-        }
-    }
-    public static boolean runningOnUiThread() {
-        return getUiThreadHandler().getLooper() == Looper.myLooper();
-    }
-    public static Handler getUiThreadHandler() {
-        boolean createdHandler = false;
-        synchronized (sLock) {
-            if (sUiThreadHandler == null) {
-                sUiThreadHandler = new Handler(Looper.getMainLooper());
-                createdHandler = true;
-            }
-        }
-        if (createdHandler) {
-            //TraceEvent.onUiThreadReady();
-        }
-        return sUiThreadHandler;
-    }
-    private static final Object sLock = new Object();
-    private static Handler sUiThreadHandler;
 }
