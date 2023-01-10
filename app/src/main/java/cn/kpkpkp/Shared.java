@@ -46,10 +46,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import de.cketti.fileprovider.PublicFileProvider;
 
 import static android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 import static java.lang.Math.max;
