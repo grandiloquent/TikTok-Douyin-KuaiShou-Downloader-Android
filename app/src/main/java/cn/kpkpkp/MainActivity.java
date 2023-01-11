@@ -2,21 +2,36 @@ package cn.kpkpkp;
 
 import android.Manifest.permission;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy.Type;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPInputStream;
 
 public class MainActivity extends Activity {
     public static final String KEY_PORT = "key_port";
@@ -36,6 +51,7 @@ public class MainActivity extends Activity {
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
+        mWebView.addJavascriptInterface(new WebAppInterface(this), "NativeAndroid");
         setContentView(mWebView);
     }
 
@@ -77,4 +93,5 @@ public class MainActivity extends Activity {
         }
         initialize();
     }
+
 }
