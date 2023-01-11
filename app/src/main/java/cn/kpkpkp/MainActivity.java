@@ -3,26 +3,58 @@ package cn.kpkpkp;
 import android.Manifest.permission;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainActivity extends Activity {
+    public static final String KEY_PORT = "key_port";
+
     static {
         System.loadLibrary("nativelib");
     }
 
     public native static boolean startServer(
             Context context,
-            String ip, int port);
+            String ip, int port, String directory);
+
+    WebView mWebView;
+
+    private void initializeWebView() {
+        mWebView = new WebView(this);
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        setContentView(mWebView);
+    }
 
     private void initialize() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int port = preferences.getInt(KEY_PORT, 10808);
+        String tempHost = Shared.getDeviceIP(this);
+        String host = tempHost == null ? "0.0.0.0" : tempHost;
+        initializeWebView();
+        new Thread(() -> {
+            runOnUiThread(() -> {
+                mWebView.loadUrl("http://" + host + ":" + port);
+            });
+            startServer(this, host, port,
+                    getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+
+        }).start();
+        Log.e("B5aOx2", String.format("initialize, %s", "http://" + host + ":" + port));
+
     }
 
     @Override
