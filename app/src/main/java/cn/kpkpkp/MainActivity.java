@@ -1,6 +1,7 @@
 package cn.kpkpkp;
 
 import android.Manifest.permission;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -35,29 +38,27 @@ import java.util.zip.GZIPInputStream;
 
 public class MainActivity extends Activity {
     public static final String KEY_PORT = "key_port";
+    public static final String KEY_DIRECTORY = "key_directory";
+    public static final int ITEM_ID_REFRESH = 1;
 
     static {
         System.loadLibrary("nativelib");
     }
 
-    public native static boolean startServer(
-            Context context,
-            String ip, int port, String directory);
-
     WebView mWebView;
 
-    private void initializeWebView() {
-        mWebView = new WebView(this);
-        WebSettings settings = mWebView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        mWebView.addJavascriptInterface(new WebAppInterface(this), "NativeAndroid");
-        setContentView(mWebView);
-    }
+    SharedPreferences mSharedPreferences;
+
+    public native static boolean startServer(
+            MainActivity context,
+            String ip, int port);
 
     private void initialize() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int port = preferences.getInt(KEY_PORT, 10808);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (mSharedPreferences.getString(KEY_DIRECTORY, null) == null) {
+            mSharedPreferences.edit().putString(KEY_DIRECTORY, getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()).apply();
+        }
+        int port = mSharedPreferences.getInt(KEY_PORT, 10808);
         String tempHost = Shared.getDeviceIP(this);
         String host = tempHost == null ? "0.0.0.0" : tempHost;
         initializeWebView();
@@ -65,12 +66,21 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> {
                 mWebView.loadUrl("http://" + host + ":" + port);
             });
-            startServer(this, host, port,
-                    getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+            startServer(this, host, port);
 
         }).start();
-        Log.e("B5aOx2", String.format("initialize, %s", "http://" + host + ":" + port));
+    }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    private void initializeWebView() {
+        mWebView = new WebView(this);
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setAppCacheEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        mWebView.addJavascriptInterface(new WebAppInterface(this), "NativeAndroid");
+        setContentView(mWebView);
     }
 
     @Override
@@ -88,10 +98,30 @@ public class MainActivity extends Activity {
             needPermissions.add(permission.FOREGROUND_SERVICE);
         }
         if (needPermissions.size() > 0) {
-            requestPermissions(needPermissions.toArray(new String[0]), 1);
+            requestPermissions(needPermissions.toArray(new String[0]), ITEM_ID_REFRESH);
             return;
         }
         initialize();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, ITEM_ID_REFRESH, 0, R.string.refresh);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case ITEM_ID_REFRESH:
+                mWebView.clearCache(true);
+                mWebView.reload();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public String getStringValue(String key) {
+        return mSharedPreferences.getString(key, "");
+    }
 }
