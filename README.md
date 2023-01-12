@@ -5,3 +5,7 @@
 <div>
 <img width="33.333%" src="./images/Screenshot_2023-01-12-15-30-54-146_cn.gif">
 </div>
+
+## 示例
+
+[APK 示例](https://github.com/grandiloquent/TikTok-Douyin-KuaiShou-Downloader-Android/releases)
