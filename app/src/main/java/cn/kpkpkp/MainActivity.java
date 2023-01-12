@@ -37,9 +37,9 @@ import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 public class MainActivity extends Activity {
-    public static final String KEY_PORT = "key_port";
-    public static final String KEY_DIRECTORY = "key_directory";
     public static final int ITEM_ID_REFRESH = 1;
+    public static final String KEY_DIRECTORY = "key_directory";
+    public static final String KEY_PORT = "key_port";
 
     static {
         System.loadLibrary("nativelib");
@@ -48,6 +48,10 @@ public class MainActivity extends Activity {
     WebView mWebView;
 
     SharedPreferences mSharedPreferences;
+
+    public String getStringValue(String key) {
+        return mSharedPreferences.getString(key, "");
+    }
 
     public native static boolean startServer(
             MainActivity context,
@@ -83,6 +87,11 @@ public class MainActivity extends Activity {
         setContentView(mWebView);
     }
 
+    private void refresh() {
+        mWebView.clearCache(true);
+        mWebView.reload();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,14 +123,9 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case ITEM_ID_REFRESH:
-                mWebView.clearCache(true);
-                mWebView.reload();
+                refresh();
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public String getStringValue(String key) {
-        return mSharedPreferences.getString(key, "");
     }
 }
