@@ -1,8 +1,11 @@
 package cn.kpkpkp;
 
+import android.app.DownloadManager;
+import android.app.DownloadManager.Request;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.net.Uri;
 import android.webkit.JavascriptInterface;
 
 public class WebAppInterface {
@@ -11,6 +14,21 @@ public class WebAppInterface {
 
     public WebAppInterface(Context context) {
         mContext = context;
+    }
+
+    @JavascriptInterface
+    public void downloadFile(String fileName, String uri) {
+        DownloadManager dm = (DownloadManager) mContext
+                .getSystemService(Context.DOWNLOAD_SERVICE);
+        Request request = new Request(Uri.parse(uri));
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
+                .setAllowedOverRoaming(false)
+                .setTitle(fileName)
+                //.setDescription(context.getString(R.string.msgDownloadFile, fileName))
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+                .setVisibleInDownloadsUi(false);
+        //.setDestinationInExternalPublicDir(getDirectoryPath(type), SLASH + context.getString(R.string.app_name) + SLASH + type + SLASH + fileName);
+        dm.enqueue(request);
     }
 
     @JavascriptInterface
