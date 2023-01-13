@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
@@ -19,18 +20,21 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void downloadFile(String fileName, String uri) {
-        Log.e("B5aOx2", String.format("downloadFile, %s", fileName));
-        DownloadManager dm = (DownloadManager) mContext
-                .getSystemService(Context.DOWNLOAD_SERVICE);
-        Request request = new Request(Uri.parse(uri));
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
-                .setAllowedOverRoaming(false)
-                .setTitle(fileName)
-                //.setDescription(context.getString(R.string.msgDownloadFile, fileName))
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
-                .setVisibleInDownloadsUi(false);
-        //.setDestinationInExternalPublicDir(getDirectoryPath(type), SLASH + context.getString(R.string.app_name) + SLASH + type + SLASH + fileName);
-        dm.enqueue(request);
+        Log.e("B5aOx2", String.format("downloadFile, %s", uri));
+        try {
+            DownloadManager dm = (DownloadManager) mContext
+                    .getSystemService(Context.DOWNLOAD_SERVICE);
+            Request request = new Request(Uri.parse(uri));
+//            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
+//                    .setAllowedOverRoaming(false)
+//                    .setTitle(fileName)
+//                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+//                    .setVisibleInDownloadsUi(false);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+            dm.enqueue(request);
+        } catch (Exception ignored) {
+            Log.e("B5aOx2", String.format("downloadFile, %s", ignored.getMessage()));
+        }
     }
 
     @JavascriptInterface
