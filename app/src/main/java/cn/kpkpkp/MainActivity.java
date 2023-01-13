@@ -3,44 +3,22 @@ package cn.kpkpkp;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.ConsoleMessage;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebChromeClient.CustomViewCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy.Type;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import java.util.zip.GZIPInputStream;
+
 
 public class MainActivity extends Activity {
     public static final int ITEM_ID_REFRESH = 1;
@@ -90,6 +68,7 @@ public class MainActivity extends Activity {
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         mWebView.addJavascriptInterface(new WebAppInterface(this), "NativeAndroid");
+        mWebView.setWebViewClient(new CustomWebViewClient(this));
         mWebView.setWebChromeClient(new CustomWebChromeClient(this));
         setContentView(mWebView);
     }
@@ -136,49 +115,5 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class CustomWebChromeClient extends WebChromeClient {
-        private MainActivity mMainActivity;
-        private View mCustomView;
-        private WebChromeClient.CustomViewCallback mCustomViewCallback;
-        protected FrameLayout mFullscreenContainer;
-        private int mOriginalOrientation;
-        private int mOriginalSystemUiVisibility;
 
-        public CustomWebChromeClient(MainActivity mainActivity) {
-            mMainActivity = mainActivity;
-        }
-
-        @Override
-        public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            Log.e("B5aOx2", String.format("onConsoleMessage, %s\n%s", consoleMessage.message(), consoleMessage.lineNumber()));
-            return super.onConsoleMessage(consoleMessage);
-        }
-
-        public void onHideCustomView() {
-            ((FrameLayout) mMainActivity.getWindow().getDecorView()).removeView(this.mCustomView);
-            this.mCustomView = null;
-            mMainActivity.getWindow().getDecorView().setSystemUiVisibility(this.mOriginalSystemUiVisibility);
-            mMainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            this.mCustomViewCallback.onCustomViewHidden();
-            this.mCustomViewCallback = null;
-        }
-
-        @Override
-        public void onShowCustomView(View paramView, CustomViewCallback paramCustomViewCallback) {
-            if (this.mCustomView != null) {
-                onHideCustomView();
-                return;
-            }
-            this.mCustomView = paramView;
-            this.mOriginalSystemUiVisibility = mMainActivity.getWindow().getDecorView().getSystemUiVisibility();
-            this.mOriginalOrientation = mMainActivity.getRequestedOrientation();
-            this.mCustomViewCallback = paramCustomViewCallback;
-            ((FrameLayout) mMainActivity.getWindow().getDecorView()).addView(this.mCustomView, new FrameLayout.LayoutParams(-1, -1));
-            mMainActivity.getWindow().getDecorView().setSystemUiVisibility(3846 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            mMainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-        }
-
-
-    }
 }

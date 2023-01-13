@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 public class WebAppInterface {
@@ -18,6 +19,7 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void downloadFile(String fileName, String uri) {
+        Log.e("B5aOx2", String.format("downloadFile, %s", fileName));
         DownloadManager dm = (DownloadManager) mContext
                 .getSystemService(Context.DOWNLOAD_SERVICE);
         Request request = new Request(Uri.parse(uri));
