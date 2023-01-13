@@ -2,12 +2,17 @@ package cn.kpkpkp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.util.Log;
+import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.io.ByteArrayInputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 
 
@@ -27,9 +32,9 @@ public class CustomWebViewClient extends WebViewClient {
             new ByteArrayInputStream("".getBytes())
     );
     private String mJavaScript;
-    private final Context mContext;
+    private final MainActivity mContext;
 
-    public CustomWebViewClient(Context context) {
+    public CustomWebViewClient(MainActivity context) {
 //        mClientInterface = clientInterface;
 //        try {
 //            mJavaScript = FileShare.readText(clientInterface.getContext().getAssets().open("youtube.js"));
@@ -42,13 +47,13 @@ public class CustomWebViewClient extends WebViewClient {
 
     @Override
     public void onPageFinished(WebView view, String url) {
-
+        String cookie;
+        if (url.startsWith("https://www.toutiao.com/video/") && (cookie = CookieManager.getInstance().getCookie(url)) != null) {
+            Log.e("B5aOx2", String.format("onPageFinished, %s", cookie));
+            mContext.setString(MainActivity.KEY_TOUTIAO_COOKIE, cookie);
+        }
     }
 
-    @Override
-    public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        super.onPageStarted(view, url, favicon);
-    }
 
     @Override
     @SuppressWarnings("deprecation")
