@@ -60,8 +60,10 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void share(String path) {
-        Log.e("B5aOx2", String.format("share, %s", path));
-        mContext.startActivity(Shared.buildSharedIntent(mContext, new File(path)));
+        try {
+            mContext.startActivity(Shared.buildSharedIntent(mContext, new File(path)));
+        }catch (Exception ignored){
+        }
     }
 
 }

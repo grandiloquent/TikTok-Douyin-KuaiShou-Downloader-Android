@@ -62,8 +62,7 @@ public class Shared {
             sharingIntent.setType("*/*");
         else
             sharingIntent.setType("video/mp4");
-        Uri uri = PublicFileProvider.getUriForFile(context, "psycho.euphoria.video.files", imageFile);
-        Log.e("B5aOx2", String.format("buildSharedIntent, %s", uri));
+        Uri uri = PublicFileProvider.getUriForFile(context, "cn.kpkpkp.files", imageFile);
         //        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
 //        StrictMode.setVmPolicy(builder.build());
         //sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
