@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Video Downloader</string>
     <string name="refresh">Refresh</string>
+    <string name="open">Open</string>
 </resources>

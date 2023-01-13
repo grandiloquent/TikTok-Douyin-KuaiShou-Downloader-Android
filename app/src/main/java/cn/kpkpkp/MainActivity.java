@@ -19,8 +19,10 @@ import android.webkit.WebView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
     public static final String KEY_DIRECTORY = "key_directory";
     public static final String KEY_PORT = "key_port";
     public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36";
+    private static final int ITEM_ID_OPEN = 2;
 
     static {
         System.loadLibrary("nativelib");
@@ -133,6 +136,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, ITEM_ID_REFRESH, 0, R.string.refresh);
+        menu.add(0, ITEM_ID_OPEN, 0, R.string.open);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -142,8 +146,22 @@ public class MainActivity extends Activity {
             case ITEM_ID_REFRESH:
                 refresh();
                 break;
+            case ITEM_ID_OPEN:
+                open();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void open() {
+        CharSequence strings = Shared.getText(this);
+        if (strings == null) return;
+        List<String> patterns = new ArrayList<>();
+        // Pattern pattern=Pattern.compile("https://m.toutiao.com/is/[^/]+/");
+        patterns.add("https://m.toutiao.com/is/[^/]+/");
+        String url = Shared.matches(strings.toString(), patterns);
+        if (url == null) return;
+        mWebView.loadUrl(url);
     }
 
     @Override

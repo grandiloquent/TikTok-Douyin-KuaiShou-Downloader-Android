@@ -45,6 +45,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.Formatter;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import static java.lang.Math.max;
@@ -321,6 +324,18 @@ public class Shared {
         }
     }
 
+    public static String matches(String strings, List<String> patterns) {
+        for (String p :
+                patterns) {
+            Pattern pattern = Pattern.compile(p);
+            Matcher matcher = pattern.matcher(strings);
+            if (matcher.find()) {
+                return matcher.group();
+            }
+        }
+        return null;
+    }
+
     public static String md5(String md5) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -509,6 +524,7 @@ public class Shared {
         }
         return config;
     }
+
     /*
 https://android.googlesource.com/platform/tools/tradefederation/+/ae241fc/src/com/android/tradefed/util/StreamUtil.java
      */
