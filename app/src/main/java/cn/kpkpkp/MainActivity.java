@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,6 +52,32 @@ public class MainActivity extends Activity {
         if (mSharedPreferences.getString(KEY_DIRECTORY, null) == null) {
             mSharedPreferences.edit().putString(KEY_DIRECTORY, getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()).apply();
         }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                File dir = new File(Shared.substringBeforeLast(mSharedPreferences.getString(KEY_DIRECTORY, null),"/Android/"),"" +
+                        "Download");
+                File parent = new File(dir, ".images");
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                File[] files = dir.listFiles(file -> file.isFile() && file.getName().endsWith(".mp4"));
+                for (File file : files) {
+
+                    String output = parent + "/" + Shared.md5(file.getAbsolutePath());
+                    if (new File(output).exists()) continue;
+                    try {
+                        FileOutputStream fileOutputStream = new FileOutputStream(output);
+                        Bitmap bitmap = Shared.createVideoThumbnail(file.getAbsolutePath());
+                        bitmap.compress(CompressFormat.JPEG, 75, fileOutputStream);
+                        bitmap.recycle();
+                        fileOutputStream.close();
+                    } catch (Exception ignored) {
+                    }
+
+                }
+            }
+        }).start();
         int port = mSharedPreferences.getInt(KEY_PORT, 10808);
         String tempHost = Shared.getDeviceIP(this);
         String host = tempHost == null ? "0.0.0.0" : tempHost;

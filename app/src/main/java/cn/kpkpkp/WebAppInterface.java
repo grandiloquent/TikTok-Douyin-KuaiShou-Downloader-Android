@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
+import java.io.File;
+
 public class WebAppInterface {
 
     private Context mContext;
@@ -54,6 +56,12 @@ public class WebAppInterface {
         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("demo", text);
         clipboard.setPrimaryClip(clip);
+    }
+
+    @JavascriptInterface
+    public void share(String path) {
+        Log.e("B5aOx2", String.format("share, %s", path));
+        mContext.startActivity(Shared.buildSharedIntent(mContext, new File(path)));
     }
 
 }

@@ -229,7 +229,7 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
 public class PublicFileProvider extends ContentProvider {
     private static final String[] COLUMNS = { OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE };
 
-    private static final String META_DATA_FILE_PROVIDER_PATHS = "de.cketti.fileprovider.PUBLIC_FILE_PROVIDER_PATHS";
+    private static final String META_DATA_FILE_PROVIDER_PATHS = "cn.kpkpkp.PUBLIC_FILE_PROVIDER_PATHS";
 
     private static final String TAG_ROOT_PATH = "root-path";
     private static final String TAG_FILES_PATH = "files-path";
