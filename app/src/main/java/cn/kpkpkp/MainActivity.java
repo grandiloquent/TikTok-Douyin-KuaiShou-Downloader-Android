@@ -3,7 +3,6 @@ package cn.kpkpkp;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
@@ -30,6 +28,7 @@ public class MainActivity extends Activity {
     public static final int ITEM_ID_REFRESH = 1;
     public static final String KEY_DIRECTORY = "key_directory";
     public static final String KEY_PORT = "key_port";
+    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36";
 
     static {
         System.loadLibrary("nativelib");
@@ -55,7 +54,7 @@ public class MainActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                File dir = new File(Shared.substringBeforeLast(mSharedPreferences.getString(KEY_DIRECTORY, null),"/Android/"),"" +
+                File dir = new File(Shared.substringBeforeLast(mSharedPreferences.getString(KEY_DIRECTORY, null), "/Android/"), "" +
                         "Download");
                 File parent = new File(dir, ".images");
                 if (!parent.exists()) {
@@ -63,7 +62,6 @@ public class MainActivity extends Activity {
                 }
                 File[] files = dir.listFiles(file -> file.isFile() && file.getName().endsWith(".mp4"));
                 for (File file : files) {
-
                     String output = parent + "/" + Shared.md5(file.getAbsolutePath());
                     if (new File(output).exists()) continue;
                     try {
@@ -99,6 +97,7 @@ public class MainActivity extends Activity {
         settings.setDomStorageEnabled(true);
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        settings.setUserAgentString(USER_AGENT);
         mWebView.addJavascriptInterface(new WebAppInterface(this), "NativeAndroid");
         mWebView.setWebViewClient(new CustomWebViewClient(this));
         mWebView.setWebChromeClient(new CustomWebChromeClient(this));
@@ -147,5 +146,12 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (mWebView != null && mWebView.canGoBack()) {
+            mWebView.goBack();
+            return;
+        }
+        super.onBackPressed();
+    }
 }

@@ -1,7 +1,6 @@
 package cn.kpkpkp;
 
 import android.content.pm.ActivityInfo;
-import android.util.Log;
 import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
