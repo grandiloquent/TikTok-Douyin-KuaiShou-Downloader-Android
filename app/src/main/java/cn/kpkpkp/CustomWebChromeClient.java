@@ -1,6 +1,7 @@
 package cn.kpkpkp;
 
 import android.content.pm.ActivityInfo;
+import android.util.Log;
 import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
@@ -21,7 +22,7 @@ public class CustomWebChromeClient extends WebChromeClient {
 
     @Override
     public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-        //Log.e("B5aOx2", String.format("onConsoleMessage, %s\n%s", consoleMessage.message(), consoleMessage.lineNumber()));
+        Log.e("B5aOx2", String.format("onConsoleMessage, %s\n%s", consoleMessage.message(), consoleMessage.lineNumber()));
         return super.onConsoleMessage(consoleMessage);
     }
 

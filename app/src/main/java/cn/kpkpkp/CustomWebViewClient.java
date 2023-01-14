@@ -49,7 +49,6 @@ public class CustomWebViewClient extends WebViewClient {
     public void onPageFinished(WebView view, String url) {
         String cookie;
         if (url.startsWith("https://www.toutiao.com/video/") && (cookie = CookieManager.getInstance().getCookie(url)) != null) {
-            Log.e("B5aOx2", String.format("onPageFinished, %s", cookie));
             mContext.setString(MainActivity.KEY_TOUTIAO_COOKIE, cookie);
         }
     }
