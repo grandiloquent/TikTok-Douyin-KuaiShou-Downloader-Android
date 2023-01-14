@@ -12,6 +12,7 @@ import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
@@ -30,7 +31,9 @@ public class MainActivity extends Activity {
     public static final int ITEM_ID_REFRESH = 1;
     public static final String KEY_DIRECTORY = "key_directory";
     public static final String KEY_PORT = "key_port";
+    public static final String KEY_KUAISHOU_COOKIE = "key_kuaishou_cookie";
     public static final String KEY_TOUTIAO_COOKIE = "key_toutiao_cookie";
+
     public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36";
     private static final int ITEM_ID_OPEN = 2;
 
@@ -118,6 +121,8 @@ public class MainActivity extends Activity {
         List<String> patterns = new ArrayList<>();
         // Pattern pattern=Pattern.compile("https://m.toutiao.com/is/[^/]+/");
         patterns.add("https://m.toutiao.com/is/[^/]+/");
+        patterns.add("https://v.kuaishou.com/[^ ]+");
+
         String url = Shared.matches(strings.toString(), patterns);
         if (url == null) return;
         mWebView.loadUrl(url);
