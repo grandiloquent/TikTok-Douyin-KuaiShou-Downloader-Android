@@ -85,7 +85,8 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void refreshThumbnails() {
-       Thread thread= mContext.generateVideoThumbnails();
+        Thread thread = mContext.generateVideoThumbnails();
+        thread.start();
         try {
             thread.join();
         } catch (InterruptedException e) {
