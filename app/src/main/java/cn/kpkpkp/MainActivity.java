@@ -31,8 +31,9 @@ public class MainActivity extends Activity {
     public static final int ITEM_ID_REFRESH = 1;
     public static final String KEY_DIRECTORY = "key_directory";
     public static final String KEY_PORT = "key_port";
-    public static final String KEY_KUAISHOU_COOKIE = "key_kuaishou_cookie";
     public static final String KEY_TOUTIAO_COOKIE = "key_toutiao_cookie";
+    public static final String KEY_KUAISHOU_COOKIE = "key_kuaishou_cookie";
+    public static final String KEY_XVIDEOS_COOKIE = "key_xvideos_cookie";
 
     public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36";
     private static final int ITEM_ID_OPEN = 2;
@@ -62,6 +63,7 @@ public class MainActivity extends Activity {
         if (mSharedPreferences.getString(KEY_DIRECTORY, null) == null) {
             mSharedPreferences.edit().putString(KEY_DIRECTORY, getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()).apply();
         }
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,7 +124,7 @@ public class MainActivity extends Activity {
         // Pattern pattern=Pattern.compile("https://m.toutiao.com/is/[^/]+/");
         patterns.add("https://m.toutiao.com/is/[^/]+/");
         patterns.add("https://v.kuaishou.com/[^ ]+");
-
+        patterns.add("https://www.xvideos.com/[^ ]+");
         String url = Shared.matches(strings.toString(), patterns);
         if (url == null) return;
         mWebView.loadUrl(url);

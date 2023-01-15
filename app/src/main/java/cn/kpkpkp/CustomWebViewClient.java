@@ -54,6 +54,9 @@ public class CustomWebViewClient extends WebViewClient {
         if (url.startsWith("https://www.kuaishou.com/short-video/") && (cookie = CookieManager.getInstance().getCookie(url)) != null) {
             mContext.setString(MainActivity.KEY_KUAISHOU_COOKIE, cookie);
         }
+        if (url.startsWith("https://www.xvideos.com/") && (cookie = CookieManager.getInstance().getCookie(url)) != null) {
+            mContext.setString(MainActivity.KEY_XVIDEOS_COOKIE, cookie);
+        }
     }
 
 
