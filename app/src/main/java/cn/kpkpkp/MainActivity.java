@@ -30,9 +30,9 @@ import java.util.stream.Collectors;
 public class MainActivity extends Activity {
     public static final int ITEM_ID_REFRESH = 1;
     public static final String KEY_DIRECTORY = "key_directory";
+    public static final String KEY_KUAISHOU_COOKIE = "key_kuaishou_cookie";
     public static final String KEY_PORT = "key_port";
     public static final String KEY_TOUTIAO_COOKIE = "key_toutiao_cookie";
-    public static final String KEY_KUAISHOU_COOKIE = "key_kuaishou_cookie";
     public static final String KEY_XVIDEOS_COOKIE = "key_xvideos_cookie";
 
     public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36";
@@ -45,6 +45,31 @@ public class MainActivity extends Activity {
     WebView mWebView;
 
     SharedPreferences mSharedPreferences;
+
+    public void generateVideoThumbnails() {
+        new Thread(() -> {
+            File dir = new File(Shared.substringBeforeLast(mSharedPreferences.getString(KEY_DIRECTORY, null), "/Android/"), "" +
+                    "Download");
+            File parent = new File(dir, ".images");
+            if (!parent.exists()) {
+                parent.mkdirs();
+            }
+            File[] files = dir.listFiles(file -> file.isFile() && file.getName().endsWith(".mp4"));
+            for (File file : files) {
+                String output = parent + "/" + Shared.md5(file.getAbsolutePath());
+                if (new File(output).exists()) continue;
+                try {
+                    FileOutputStream fileOutputStream = new FileOutputStream(output);
+                    Bitmap bitmap = Shared.createVideoThumbnail(file.getAbsolutePath());
+                    bitmap.compress(CompressFormat.JPEG, 75, fileOutputStream);
+                    bitmap.recycle();
+                    fileOutputStream.close();
+                } catch (Exception ignored) {
+                }
+
+            }
+        }).start();
+    }
 
     public String getString(String key) {
         return mSharedPreferences.getString(key, "");
@@ -63,43 +88,8 @@ public class MainActivity extends Activity {
         if (mSharedPreferences.getString(KEY_DIRECTORY, null) == null) {
             mSharedPreferences.edit().putString(KEY_DIRECTORY, getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()).apply();
         }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                File dir = new File(Shared.substringBeforeLast(mSharedPreferences.getString(KEY_DIRECTORY, null), "/Android/"), "" +
-                        "Download");
-                File parent = new File(dir, ".images");
-                if (!parent.exists()) {
-                    parent.mkdirs();
-                }
-                File[] files = dir.listFiles(file -> file.isFile() && file.getName().endsWith(".mp4"));
-                for (File file : files) {
-                    String output = parent + "/" + Shared.md5(file.getAbsolutePath());
-                    if (new File(output).exists()) continue;
-                    try {
-                        FileOutputStream fileOutputStream = new FileOutputStream(output);
-                        Bitmap bitmap = Shared.createVideoThumbnail(file.getAbsolutePath());
-                        bitmap.compress(CompressFormat.JPEG, 75, fileOutputStream);
-                        bitmap.recycle();
-                        fileOutputStream.close();
-                    } catch (Exception ignored) {
-                    }
-
-                }
-            }
-        }).start();
-        int port = mSharedPreferences.getInt(KEY_PORT, 10808);
-        String tempHost = Shared.getDeviceIP(this);
-        String host = tempHost == null ? "0.0.0.0" : tempHost;
-        initializeWebView();
-        new Thread(() -> {
-            runOnUiThread(() -> {
-                mWebView.loadUrl("http://" + host + ":" + port);
-            });
-            startServer(this, host, port);
-
-        }).start();
+        generateVideoThumbnails();
+        startServer();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -133,6 +123,20 @@ public class MainActivity extends Activity {
     private void refresh() {
         mWebView.clearCache(true);
         mWebView.reload();
+    }
+
+    private void startServer() {
+        int port = mSharedPreferences.getInt(KEY_PORT, 10808);
+        String tempHost = Shared.getDeviceIP(this);
+        String host = tempHost == null ? "0.0.0.0" : tempHost;
+        initializeWebView();
+        new Thread(() -> {
+            runOnUiThread(() -> {
+                mWebView.loadUrl("http://" + host + ":" + port);
+            });
+            startServer(this, host, port);
+
+        }).start();
     }
 
     @Override
