@@ -16,9 +16,9 @@ import java.net.URL;
 
 public class WebAppInterface {
 
-    private Context mContext;
+    private MainActivity mContext;
 
-    public WebAppInterface(Context context) {
+    public WebAppInterface(MainActivity context) {
         mContext = context;
     }
 
@@ -80,6 +80,16 @@ public class WebAppInterface {
         try {
             mContext.startActivity(Shared.buildSharedIntent(mContext, new File(path)));
         } catch (Exception ignored) {
+        }
+    }
+
+    @JavascriptInterface
+    public void refreshThumbnails() {
+       Thread thread= mContext.generateVideoThumbnails();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

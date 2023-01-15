@@ -46,8 +46,8 @@ public class MainActivity extends Activity {
 
     SharedPreferences mSharedPreferences;
 
-    public void generateVideoThumbnails() {
-        new Thread(() -> {
+    public Thread generateVideoThumbnails() {
+        return new Thread(() -> {
             File dir = new File(Shared.substringBeforeLast(mSharedPreferences.getString(KEY_DIRECTORY, null), "/Android/"), "" +
                     "Download");
             File parent = new File(dir, ".images");
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
                 }
 
             }
-        }).start();
+        });
     }
 
     public String getString(String key) {
@@ -88,7 +88,7 @@ public class MainActivity extends Activity {
         if (mSharedPreferences.getString(KEY_DIRECTORY, null) == null) {
             mSharedPreferences.edit().putString(KEY_DIRECTORY, getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()).apply();
         }
-        generateVideoThumbnails();
+        generateVideoThumbnails().start();
         startServer();
     }
 
