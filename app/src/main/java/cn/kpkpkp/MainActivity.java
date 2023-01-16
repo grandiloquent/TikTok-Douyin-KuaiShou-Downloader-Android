@@ -3,15 +3,23 @@ package cn.kpkpkp;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.app.DownloadManager.Request;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +28,9 @@ import android.webkit.WebView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -90,6 +101,36 @@ public class MainActivity extends Activity {
         }
         generateVideoThumbnails().start();
         startServer();
+        new Thread(this::triggerMediaScan).start();
+    }
+
+    private void triggerMediaScan() {
+        if (VERSION.SDK_INT >= VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                try {
+                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
+                    startActivity(intent);
+                } catch (Exception ex) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivity(intent);
+                }
+            }
+        }
+        if (VERSION.SDK_INT >= VERSION_CODES.O) {
+            try {
+                Files.list(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toPath())
+                        .filter(x -> Files.isRegularFile(x))
+                        .forEach(x -> {
+                            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            Uri contentUri = Uri.fromFile(x.toFile()); // out is your output file
+                            mediaScanIntent.setData(contentUri);
+                            this.sendBroadcast(mediaScanIntent);
+                        });
+            } catch (IOException e) {
+            }
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
