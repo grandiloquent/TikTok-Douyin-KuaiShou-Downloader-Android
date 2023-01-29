@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../../jni"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "jni"
+	}
+}

@@ -82,18 +82,12 @@ public class MainActivity extends Activity {
         });
     }
 
-    public String getString(String key) {
-        return mSharedPreferences.getString(key, "");
-    }
+
+
 
     public void setString(String key, String value) {
         mSharedPreferences.edit().putString(key, value).apply();
     }
-
-    public native static boolean startServer(
-            MainActivity context,
-            String ip, int port);
-
     private void initialize() {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (mSharedPreferences.getString(KEY_DIRECTORY, null) == null) {
@@ -171,13 +165,10 @@ public class MainActivity extends Activity {
         String tempHost = Shared.getDeviceIP(this);
         String host = tempHost == null ? "0.0.0.0" : tempHost;
         initializeWebView();
-        new Thread(() -> {
-            runOnUiThread(() -> {
-                mWebView.loadUrl("http://" + host + ":" + port);
-            });
-            startServer(this, host, port);
+        mWebView.loadUrl("http://" + host + ":" + port);
 
-        }).start();
+        Intent intent = new Intent(this, ServerService.class);
+        startService(intent);
     }
 
     @Override

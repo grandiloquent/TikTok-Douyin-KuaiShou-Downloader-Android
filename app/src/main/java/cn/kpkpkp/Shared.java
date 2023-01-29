@@ -26,8 +26,10 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,11 +43,15 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -523,6 +529,36 @@ public class Shared {
             config = Bitmap.Config.ARGB_8888;
         }
         return config;
+    }
+
+    private static final String TIME_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(TIME_DATE_PATTERN, new Locale("en"));
+
+    public static void log(String filename, String... texts) {
+        synchronized (sLock) {
+            Date now = new Date();
+            BufferedWriter buf;
+            try {
+//                File file = new File(filename);
+//                if (!file.exists()) {
+//                    file.createNewFile();
+//                }
+                FileWriter writer = new FileWriter(filename, true);
+                buf = new BufferedWriter(writer);
+                buf.append(DATE_FORMATTER.format(now));
+                buf.append(" ");
+                if (texts != null) {
+                    for (String text : texts) {
+                        buf.append(text).append(" ");
+                    }
+                }
+                buf.newLine();
+                buf.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /*
