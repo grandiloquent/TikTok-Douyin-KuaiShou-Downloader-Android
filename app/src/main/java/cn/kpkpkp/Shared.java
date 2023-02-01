@@ -62,6 +62,8 @@ import static java.lang.Math.min;
 public class Shared {
 
     private static final String TAG = "";
+    private static final String TIME_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(TIME_DATE_PATTERN, new Locale("en"));
     private static final Object sLock = new Object();
     private static Handler sUiThreadHandler;
 
@@ -330,6 +332,32 @@ public class Shared {
         }
     }
 
+    public static void log(String filename, String... texts) {
+        synchronized (sLock) {
+            Date now = new Date();
+            BufferedWriter buf;
+            try {
+//                File file = new File(filename);
+//                if (!file.exists()) {
+//                    file.createNewFile();
+//                }
+                FileWriter writer = new FileWriter(filename, true);
+                buf = new BufferedWriter(writer);
+                buf.append(DATE_FORMATTER.format(now));
+                buf.append(" ");
+                if (texts != null) {
+                    for (String text : texts) {
+                        buf.append(text).append(" ");
+                    }
+                }
+                buf.newLine();
+                buf.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static String matches(String strings, List<String> patterns) {
         for (String p :
                 patterns) {
@@ -371,6 +399,28 @@ public class Shared {
                 .create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
+    }
+
+    public static String readAssetAsString(Context context, String assetName) {
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getAssets().open(assetName);
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+            return new String(buffer, StandardCharsets.UTF_8);
+
+        } catch (IOException e) {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                }
+            }
+
+        }
+        return null;
     }
 
     /*
@@ -529,36 +579,6 @@ public class Shared {
             config = Bitmap.Config.ARGB_8888;
         }
         return config;
-    }
-
-    private static final String TIME_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
-
-    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(TIME_DATE_PATTERN, new Locale("en"));
-
-    public static void log(String filename, String... texts) {
-        synchronized (sLock) {
-            Date now = new Date();
-            BufferedWriter buf;
-            try {
-//                File file = new File(filename);
-//                if (!file.exists()) {
-//                    file.createNewFile();
-//                }
-                FileWriter writer = new FileWriter(filename, true);
-                buf = new BufferedWriter(writer);
-                buf.append(DATE_FORMATTER.format(now));
-                buf.append(" ");
-                if (texts != null) {
-                    for (String text : texts) {
-                        buf.append(text).append(" ");
-                    }
-                }
-                buf.newLine();
-                buf.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     /*
