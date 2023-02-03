@@ -13,6 +13,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -36,6 +37,8 @@ import java.util.regex.Pattern;
 import cn.kpkpkp.R;
 import cn.kpkpkp.Shared;
 
+import static cn.kpkpkp.MainActivity.KEY_PORT;
+
 
 // InputServiceHelper
 public class InputService extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
@@ -48,7 +51,6 @@ public class InputService extends InputMethodService implements KeyboardView.OnK
     private final Pattern mChinese = Pattern.compile("[\\u4e00-\\u9fa5]");
 
 
-
     private Database mDatabase;
 
 
@@ -56,6 +58,10 @@ public class InputService extends InputMethodService implements KeyboardView.OnK
     public void onCreate() {
         super.onCreate();
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        int port = PreferenceManager.getDefaultSharedPreferences(this)
+                .getInt(KEY_PORT, 10808);
+        String tempHost = Shared.getDeviceIP(this);
+        String host = tempHost == null ? "0.0.0.0" : tempHost;
         clipboardManager.addPrimaryClipChangedListener(() -> {
             ClipData clipData = clipboardManager.getPrimaryClip();
             if (clipData == null) return;
@@ -65,9 +71,17 @@ public class InputService extends InputMethodService implements KeyboardView.OnK
                     return;
                 }
                 mCurrentString = charSequence.toString();
-                if (mCurrentString.startsWith("http://") || mCurrentString.startsWith("https://"))
-                {
-
+                if (mCurrentString.startsWith("http://") || mCurrentString.startsWith("https://")) {
+                    new Thread(()->{
+                        try {
+                            if (mCurrentString.contains("tiktok.com")) {
+                                HttpURLConnection c = (HttpURLConnection) new URL("http://" + host + ":" + port + "/api/tiktok?q=" + Uri.encode(mCurrentString)).openConnection();
+                                Log.e("B5aOx2", String.format("onCreate, %s", c.getResponseCode()));
+                            }
+                        } catch (Exception e) {
+                            Log.e("B5aOx2", String.format("onCreate, %s", e.getMessage()),e);
+                        }
+                    }).start();
                 }
             }
         });

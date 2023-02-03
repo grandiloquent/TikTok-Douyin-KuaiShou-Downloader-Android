@@ -18,6 +18,9 @@ import android.preference.PreferenceManager;
 import java.io.File;
 
 public class ServerService extends Service {
+    static {
+        System.loadLibrary("nativelib");
+    }
     public static final String ACTION_DISMISS = "cn.kpkpkp.ServerService.ACTION_DISMISS";
     private static final String KP_NOTIFICATION_CHANNEL_ID = "kp_notification_channel";
     SharedPreferences mSharedPreferences;
