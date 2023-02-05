@@ -50,7 +50,6 @@ public class MainActivity extends Activity {
     private static final int ITEM_ID_OPEN = 2;
 
 
-
     WebView mWebView;
 
     SharedPreferences mSharedPreferences;
@@ -81,16 +80,18 @@ public class MainActivity extends Activity {
     }
 
 
-
-
     public void setString(String key, String value) {
         mSharedPreferences.edit().putString(key, value).apply();
     }
+
     private void initialize() {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (mSharedPreferences.getString(KEY_DIRECTORY, null) == null) {
             mSharedPreferences.edit().putString(KEY_DIRECTORY, getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()).apply();
         }
+//        if (Shared.isDeviceRooted()) {
+//            Shared.requestRoot();
+//        }
         generateVideoThumbnails().start();
         startServer();
         new Thread(this::triggerMediaScan).start();
@@ -164,7 +165,6 @@ public class MainActivity extends Activity {
         String host = tempHost == null ? "0.0.0.0" : tempHost;
         initializeWebView();
         mWebView.loadUrl("http://" + host + ":" + port);
-
         Intent intent = new Intent(this, ServerService.class);
         startService(intent);
     }

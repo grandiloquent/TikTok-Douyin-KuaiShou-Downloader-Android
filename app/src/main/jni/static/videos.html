@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频列表</title>
+    <link rel="stylesheet" href="index.css">
+    <script type="module" src="custom-header.js"></script>
+    <script type="module" src="custom-drawer.js"></script>
+    <script type="module" src="custom-videos.js"></script>
+    <script type="module" src="custom-dialog-actions.js"></script>
+    <script type="module" src="custom-bottom-bar.js"></script>
+    <script type="module" src="custom-button.js"></script>
+    <script type="module" src="custom-buttons.js"></script>
+    <script type="module" src="custom-dialog.js"></script>
+    <script src="toast.js"></script>
+    <script type="module" src="custom-dialog-spinner.js"></script>
+</head>
+
+<body>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+    <custom-drawer bind="customDrawer"></custom-drawer>
+    <custom-header title="首页" bind @submit="showDrawer"></custom-header>
+    <div style="height: 56px;"></div>
+    <custom-videos bind="customVideos" @submit="onVideosHandler"></custom-videos>
+    <div style="height: 49px;"></div>
+    <custom-bottom-bar bind="customBottomBar" @submit="navigate"></custom-bottom-bar>
+    <custom-dialog-actions bind="customDialogActions" @submit="onActionsHanlder" style="display:none;">
+    </custom-dialog-actions>
+    <custom-dialog bind="customDialog" @submit="onDialogHandler" style="display:none;"></custom-dialog>
+    <custom-toast bind="customToast"></custom-toast>
+    <custom-dialog-spinner bind="customDialogSpinner" style="display:none;"></custom-dialog-spinner>
+    <script src="videos.js"></script>
+</body>
+
+</html>

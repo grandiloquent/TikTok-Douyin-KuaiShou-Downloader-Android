@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>笔记</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="custom-header.js"></script>
+    <script src="custom-drawer.js"></script>
+    <script src="custom-button.js"></script>
+    <script src="custom-buttons.js"></script>
+</head>
+
+<body>
+    <custom-drawer bind="customDrawer" @submit="onCustomDrawer"></custom-drawer>
+    <custom-header title="首页" bind="customHeader" @submit="showDrawer"></custom-header>
+    <div style="height: 56px;"></div>
+    <custom-buttons bind="customButtons" @submit="onButtonsHandler"></custom-buttons>
+    <div bind="wrapper" style="-webkit-tap-highlight-color: transparent;box-sizing: border-box;border-left: none;border-right: none;border-radius: 0;padding: 0 16px">
+
+    </div>
+    <script src="notes.js"></script>
+
+</body>
+
+</html>

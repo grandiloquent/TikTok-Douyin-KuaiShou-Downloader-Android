@@ -1,0 +1,246 @@
+{
+    "code": 200,
+    "data": {
+        "title": "二狗子在小卖部白拣一个饮料大礼包",
+        "duraion": 61,
+        "vid": "v0201ag10000cevuurbc77u5p44hk31g",
+        "isLVideo": false,
+        "posterUrl": "http://p6-sign.bdxiguaimg.com/tos-cn-i-0026/726dc402e9464e21973f39ab6493be32~tplv-pk90l89vgd-crop-center:864:486.jpeg?x-expires=1705118208&x-signature=DSs1WPlB1ay1fBrCQrkev%2FwRISs%3D",
+        "videoResource": {
+            "normal": {
+                "status": 10,
+                "message": "success",
+                "enable_ssl": true,
+                "auto_definition": "360p",
+                "enable_adaptive": true,
+                "video_id": "v0201ag10000cevuurbc77u5p44hk31g",
+                "video_duration": 61.234,
+                "media_type": "video",
+                "big_thumbs": [
+                    {
+                        "img_num": 61,
+                        "uri": "tos-cn-p-0026/d7e0c90360dc4374bc3077b3afda61cd_1673523302",
+                        "img_url": "http://p26-sign.douyinpic.com/tos-cn-p-0026/d7e0c90360dc4374bc3077b3afda61cd_1673523302~tplv-noop.image?x-expires=1673585869&x-signature=Sgf0ZKAwVhITV8aF5Bpy68IjQoI%3D",
+                        "img_urls": [
+                            "http://p26-sign.douyinpic.com/tos-cn-p-0026/d7e0c90360dc4374bc3077b3afda61cd_1673523302~tplv-noop.image?x-expires=1673585869&x-signature=Sgf0ZKAwVhITV8aF5Bpy68IjQoI%3D",
+                            "http://p26-sign.douyinpic.com/tos-cn-p-0026/1ad58fcabf574ec7830b37732d7a8b3f_1673523302~tplv-noop.image?x-expires=1673585869&x-signature=%2BC2QXArHKt%2BXXoPaOzjBBNP9P4Y%3D",
+                            "http://p26-sign.douyinpic.com/tos-cn-p-0026/af1d3d712f9b4db08aebf678013907f1_1673523302~tplv-noop.image?x-expires=1673585869&x-signature=KszszRPO3%2BHKA0BzUBA0clgBIYw%3D"
+                        ],
+                        "img_x_size": 240,
+                        "img_y_size": 136,
+                        "img_x_len": 5,
+                        "img_y_len": 5,
+                        "duration": 61.173333,
+                        "interval": 1,
+                        "fext": "jpg"
+                    }
+                ],
+                "video_list": {
+                    "video_3": {
+                        "definition": "720p",
+                        "quality": "normal",
+                        "vtype": "mp4",
+                        "vwidth": 1280,
+                        "vheight": 720,
+                        "bitrate": 2450448,
+                        "real_bitrate": 2450448,
+                        "fps": 30,
+                        "codec_type": "h264",
+                        "size": 18756346,
+                        "main_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tL2EwYzhiYzhkYmQwNjIzMzY2ODNlZmFhY2Q4NTYxMDA1LzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi83ZWJkMmUzZGY0NDM0ZjQxYTAxZjI4ODVjNDFjZTA0ZS8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9MjM5MyZidD0yMzkzJmNzPTAmZHM9MyZmdD02LUlGQWpqTTlnOHhyRnFvWm1DTTV5N0VrY0FyaGZPLk5McmhaU3lsWG1vYWdsJm1pbWVfdHlwZT12aWRlb19tcDQmcXM9MCZyYz1OVFpuYVRwbk96UTdPelpsTjJSbE9rQnBhalpyTnpnNlpuVjRhRE16TkdRek0wQTFYakJlTkRNelhtTXhYak10WVM1allTTXVhREZ0Y2pSZmNuTmdMUzFrTGk5emN3JTNEJTNEJmw9MjAyMzAxMTMxMTU2NDg1REE4RkExODUyODhFRTMwNkM0NSZidGFnPTI4MDAw",
+                        "backup_url_1": "aHR0cDovL3YzLXhnLXdlYi1wYy5peGlndWEuY29tL2IyMWE3MWU3YzUyMThmOThmMTVhYjVhYzJjYjY3NjdkLzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi83ZWJkMmUzZGY0NDM0ZjQxYTAxZjI4ODVjNDFjZTA0ZS8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9MjM5MyZidD0yMzkzJmNzPTAmZHM9MyZmdD02LUlGQWpqTTlnOHhyRnFvWm1DTTV5N0VrY0FyaGZPLk5McmhaU3lsWG1vYWdsJm1pbWVfdHlwZT12aWRlb19tcDQmcXM9MCZyYz1OVFpuYVRwbk96UTdPelpsTjJSbE9rQnBhalpyTnpnNlpuVjRhRE16TkdRek0wQTFYakJlTkRNelhtTXhYak10WVM1allTTXVhREZ0Y2pSZmNuTmdMUzFrTGk5emN3JTNEJTNEJmw9MjAyMzAxMTMxMTU2NDg1REE4RkExODUyODhFRTMwNkM0NSZidGFnPTI4MDAw",
+                        "file_id": "f71bda046ba348f8a1686d77af3da382",
+                        "volume": {
+                            "loudness": -9.2,
+                            "peak": 1
+                        },
+                        "quality_type": 10,
+                        "pkt_offset": "[[-8, 128645], [5, 1565174], [10, 3076949]]",
+                        "encryption_method": "",
+                        "audio_channels": "2.0",
+                        "audio_layout": "L R",
+                        "url_expire": 1673585869,
+                        "preload_size": 327680,
+                        "preload_interval": 60,
+                        "preload_min_step": 5,
+                        "preload_max_step": 10,
+                        "file_hash": "ae953de073d93e987b4b383b650a2622",
+                        "p2p_verify_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tL2U0MmY5NThjNzgxMzA1ZGEwYWI1NDc2ZWM4YjdiNTYyLzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi83Y2VlMWU3YTdmMDQ0YTk0YWYyY2FlN2JlNmRlNzQwNi8="
+                    },
+                    "video_4": {
+                        "definition": "1080p",
+                        "quality": "normal",
+                        "vtype": "mp4",
+                        "vwidth": 1920,
+                        "vheight": 1080,
+                        "bitrate": 4607235,
+                        "real_bitrate": 4607235,
+                        "fps": 30,
+                        "codec_type": "h264",
+                        "size": 35264929,
+                        "main_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tL2NlOTRhYjI4MTkwMmNkMTBjYWEwYzgyODM5N2E3YWUxLzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi9vSUdSaXRoQUllQThNRGU0clVtTVhmYkNoOW5rQ0VHUm9DdU9KZi8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9NDQ5OSZidD00NDk5JmNzPTAmZHM9NCZmdD02LUlGQWpqTTlnOHhyRnFvWm1DTTV5N0VrY0FyaGZPLk5McmhaU3lsWG1vYWdsJm1pbWVfdHlwZT12aWRlb19tcDQmcXM9MCZyYz1abWxuYVRRNk9HZzRNemRvYVRObU5VQnBhalpyTnpnNlpuVjRhRE16TkdRek0wQmpMVFpmWGw0eU5qVXhOVFl6THpJdllTTXVhREZ0Y2pSZmNuTmdMUzFrTGk5emN3JTNEJTNEJmw9MjAyMzAxMTMxMTU2NDg1REE4RkExODUyODhFRTMwNkM0NSZidGFnPTI4MDAw",
+                        "backup_url_1": "aHR0cDovL3YzLXhnLXdlYi1wYy5peGlndWEuY29tLzUxZjc2OGI5YzA3NmUwMWQ1YzU0OTMxODc0MmRhOTc2LzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi9vSUdSaXRoQUllQThNRGU0clVtTVhmYkNoOW5rQ0VHUm9DdU9KZi8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9NDQ5OSZidD00NDk5JmNzPTAmZHM9NCZmdD02LUlGQWpqTTlnOHhyRnFvWm1DTTV5N0VrY0FyaGZPLk5McmhaU3lsWG1vYWdsJm1pbWVfdHlwZT12aWRlb19tcDQmcXM9MCZyYz1abWxuYVRRNk9HZzRNemRvYVRObU5VQnBhalpyTnpnNlpuVjRhRE16TkdRek0wQmpMVFpmWGw0eU5qVXhOVFl6THpJdllTTXVhREZ0Y2pSZmNuTmdMUzFrTGk5emN3JTNEJTNEJmw9MjAyMzAxMTMxMTU2NDg1REE4RkExODUyODhFRTMwNkM0NSZidGFnPTI4MDAw",
+                        "file_id": "225c206f9e8440859e55a7a1bf9d0ffc",
+                        "volume": {
+                            "loudness": -9.2,
+                            "peak": 1
+                        },
+                        "quality_type": 1,
+                        "pkt_offset": "[[-8, 195669], [5, 2770541], [10, 5668332]]",
+                        "encryption_method": "",
+                        "audio_channels": "2.0",
+                        "audio_layout": "L R",
+                        "url_expire": 1673585869,
+                        "preload_size": 327680,
+                        "preload_interval": 60,
+                        "preload_min_step": 5,
+                        "preload_max_step": 10,
+                        "file_hash": "966058f44b9f1cbd6f1605f68d2f9063",
+                        "p2p_verify_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tL2U5ZDE2YjVlNzAxMDhhODAzMjU3YjkwNTZlYjNmODAxLzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi83OTQ1Yzc3NjMzZGQ0YTIyOThhOTA3NDE5ODdjZTUxNC8="
+                    },
+                    "video_5": {
+                        "definition": "4k",
+                        "quality": "normal",
+                        "vtype": "mp4",
+                        "vwidth": 3840,
+                        "vheight": 2160,
+                        "bitrate": 20154426,
+                        "real_bitrate": 20154426,
+                        "fps": 60,
+                        "codec_type": "h264",
+                        "size": 154098228,
+                        "main_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tLzFiZjVkOTAyMDBlODJlM2U0MjVmMGVhYjdjODAyZjkwLzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi9vQUVHbTZuOGYxZWI5bHFJZms2aEl6dERrR0xlUUdPMENvQUF3Ry8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9MTk2ODImYnQ9MTk2ODImY3M9MCZkcz0xMCZmdD02LUlGQWpqTTlnOHhyRnFvWm1DTTV5N0VrY0FyaGZPLk5McmhaU3lsWG1vYWdsJm1pbWVfdHlwZT12aWRlb19tcDQmcXM9MCZyYz1PMmd6Tnp4bE5XWnBPMlZrT0dSbmFFQnBhalpyTnpnNlpuVjRhRE16TkdRek0wQXpOQzgxTG1KZ05qRXhNVjR0WWpOZVlTTXVhREZ0Y2pSZmNuTmdMUzFrTGk5emN3JTNEJTNEJmw9MjAyMzAxMTMxMTU2NDg1REE4RkExODUyODhFRTMwNkM0NSZidGFnPTI4MDAw",
+                        "backup_url_1": "aHR0cDovL3YzLXhnLXdlYi1wYy5peGlndWEuY29tLzA5OTAyMDg3NjkyYWM2MTE4ZjIyZDdlMTI3ZjMyOTBmLzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi9vQUVHbTZuOGYxZWI5bHFJZms2aEl6dERrR0xlUUdPMENvQUF3Ry8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9MTk2ODImYnQ9MTk2ODImY3M9MCZkcz0xMCZmdD02LUlGQWpqTTlnOHhyRnFvWm1DTTV5N0VrY0FyaGZPLk5McmhaU3lsWG1vYWdsJm1pbWVfdHlwZT12aWRlb19tcDQmcXM9MCZyYz1PMmd6Tnp4bE5XWnBPMlZrT0dSbmFFQnBhalpyTnpnNlpuVjRhRE16TkdRek0wQXpOQzgxTG1KZ05qRXhNVjR0WWpOZVlTTXVhREZ0Y2pSZmNuTmdMUzFrTGk5emN3JTNEJTNEJmw9MjAyMzAxMTMxMTU2NDg1REE4RkExODUyODhFRTMwNkM0NSZidGFnPTI4MDAw",
+                        "file_id": "ae6dea05aa4b484f9cc2eb1984207e68",
+                        "volume": {
+                            "loudness": -9.2,
+                            "peak": 1
+                        },
+                        "quality_type": 0,
+                        "pkt_offset": "[[-8, 598345], [5, 13690883], [10, 25633276]]",
+                        "encryption_method": "",
+                        "audio_channels": "2.0",
+                        "audio_layout": "L R",
+                        "url_expire": 1673585869,
+                        "preload_size": 327680,
+                        "preload_interval": 60,
+                        "preload_min_step": 5,
+                        "preload_max_step": 10,
+                        "file_hash": "914fa27436bc5e6b3484112c16c2acfd",
+                        "p2p_verify_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tLzU4OGM4NTFlMmY0NmYxYzFhYmE0Y2I1OWVjMjA0NmE3LzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi9kYTAwOTgxZmYxZjY0NmRmYTIzYjU3NjcxZjlmOWQ0YS8="
+                    },
+                    "video_1": {
+                        "definition": "360p",
+                        "quality": "normal",
+                        "vtype": "mp4",
+                        "vwidth": 640,
+                        "vheight": 360,
+                        "bitrate": 755990,
+                        "real_bitrate": 755990,
+                        "fps": 30,
+                        "codec_type": "h264",
+                        "size": 5786543,
+                        "main_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tLzBkMDM2N2FlYzQxZWIzMjIzNzYwOGY3MzlmNDVmZGRmLzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi8zMWI1MmUzODBjZTY0OWJlYmRlMjMwYjVhYmQzZTgyZC8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9NzM4JmJ0PTczOCZjcz0wJmRzPTEmZnQ9Ni1JRkFqak05Zzh4ckZxb1ptQ001eTdFa2NBcmhmTy5OTHJoWlN5bFhtb2FnbCZtaW1lX3R5cGU9dmlkZW9fbXA0JnFzPTAmcmM9TmpkcGFXazBPRE01TlR3NlpHazNOMEJwYWpack56ZzZablY0YURNek5HUXpNMEJoWVRVMkxTODBYekV4Tm1JekxURXdZU011YURGdGNqUmZjbk5nTFMxa0xpOXpjdyUzRCUzRCZsPTIwMjMwMTEzMTE1NjQ4NURBOEZBMTg1Mjg4RUUzMDZDNDUmYnRhZz0yODAwMA==",
+                        "backup_url_1": "aHR0cDovL3YzLXhnLXdlYi1wYy5peGlndWEuY29tLzQ1YzIzZGVkYTg5ZmVmODU5MTlmYTRlMDJkY2RmZmE3LzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi8zMWI1MmUzODBjZTY0OWJlYmRlMjMwYjVhYmQzZTgyZC8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9NzM4JmJ0PTczOCZjcz0wJmRzPTEmZnQ9Ni1JRkFqak05Zzh4ckZxb1ptQ001eTdFa2NBcmhmTy5OTHJoWlN5bFhtb2FnbCZtaW1lX3R5cGU9dmlkZW9fbXA0JnFzPTAmcmM9TmpkcGFXazBPRE01TlR3NlpHazNOMEJwYWpack56ZzZablY0YURNek5HUXpNMEJoWVRVMkxTODBYekV4Tm1JekxURXdZU011YURGdGNqUmZjbk5nTFMxa0xpOXpjdyUzRCUzRCZsPTIwMjMwMTEzMTE1NjQ4NURBOEZBMTg1Mjg4RUUzMDZDNDUmYnRhZz0yODAwMA==",
+                        "file_id": "34440f6ae7994246b075210f9f8fd4d3",
+                        "volume": {
+                            "loudness": -9.3,
+                            "peak": 1
+                        },
+                        "quality_type": 40,
+                        "pkt_offset": "[[-8, 83186], [5, 502779], [10, 959161]]",
+                        "encryption_method": "",
+                        "audio_channels": "2.0",
+                        "audio_layout": "L R",
+                        "url_expire": 1673585869,
+                        "preload_size": 327680,
+                        "preload_interval": 60,
+                        "preload_min_step": 5,
+                        "preload_max_step": 10,
+                        "file_hash": "eecb5c1890028383b7aefc26fa6a468b",
+                        "p2p_verify_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tLzljYTdjNjFlYmUxMTY4N2E5ODI5YzQ3YmFhMWZjODExLzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi8xYTk2YWIzODVkMzY0MWEwOGI2ZjAzZmE3ZWQyODc0Zi8="
+                    },
+                    "video_2": {
+                        "definition": "480p",
+                        "quality": "normal",
+                        "vtype": "mp4",
+                        "vwidth": 854,
+                        "vheight": 480,
+                        "bitrate": 1199158,
+                        "real_bitrate": 1199158,
+                        "fps": 30,
+                        "codec_type": "h264",
+                        "size": 9178660,
+                        "main_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tLzIyMzU4NzM5OGM3MDU5MDhkOTMzNjc1NjgwM2JiZjQ2LzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi81YWI3YjE4YzliMzE0Zjk4OGE2Mjg3ODYwZWYyYjc1NC8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9MTE3MSZidD0xMTcxJmNzPTAmZHM9MiZmdD02LUlGQWpqTTlnOHhyRnFvWm1DTTV5N0VrY0FyaGZPLk5McmhaU3lsWG1vYWdsJm1pbWVfdHlwZT12aWRlb19tcDQmcXM9MCZyYz1PVFE3TzJnMU9qaGxPenhrWnp0bk9rQnBhalpyTnpnNlpuVjRhRE16TkdRek0wQTJZR0V6TVM0dk5XSXhZV0l4TlRGZllTTXVhREZ0Y2pSZmNuTmdMUzFrTGk5emN3JTNEJTNEJmw9MjAyMzAxMTMxMTU2NDg1REE4RkExODUyODhFRTMwNkM0NSZidGFnPTI4MDAw",
+                        "backup_url_1": "aHR0cDovL3YzLXhnLXdlYi1wYy5peGlndWEuY29tL2NiYmY1ZWMyZDUzN2NkMmMwYWYxOTRlOTFjNjg2OGQ1LzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi81YWI3YjE4YzliMzE0Zjk4OGE2Mjg3ODYwZWYyYjc1NC8/YT0xNzY4JmNoPTAmY3I9MCZkcj0wJmVyPTAmbHI9ZGVmYXVsdCZjZD0wJTdDMCU3QzAlN0MwJmN2PTEmYnI9MTE3MSZidD0xMTcxJmNzPTAmZHM9MiZmdD02LUlGQWpqTTlnOHhyRnFvWm1DTTV5N0VrY0FyaGZPLk5McmhaU3lsWG1vYWdsJm1pbWVfdHlwZT12aWRlb19tcDQmcXM9MCZyYz1PVFE3TzJnMU9qaGxPenhrWnp0bk9rQnBhalpyTnpnNlpuVjRhRE16TkdRek0wQTJZR0V6TVM0dk5XSXhZV0l4TlRGZllTTXVhREZ0Y2pSZmNuTmdMUzFrTGk5emN3JTNEJTNEJmw9MjAyMzAxMTMxMTU2NDg1REE4RkExODUyODhFRTMwNkM0NSZidGFnPTI4MDAw",
+                        "file_id": "b74d884dead948eb8527124e68d8c196",
+                        "volume": {
+                            "loudness": -9.3,
+                            "peak": 1
+                        },
+                        "quality_type": 30,
+                        "pkt_offset": "[[-8, 92107], [5, 754920], [10, 1494316]]",
+                        "encryption_method": "",
+                        "audio_channels": "2.0",
+                        "audio_layout": "L R",
+                        "url_expire": 1673585869,
+                        "preload_size": 327680,
+                        "preload_interval": 60,
+                        "preload_min_step": 5,
+                        "preload_max_step": 10,
+                        "file_hash": "c05ebd3ed677416b220ab516139fc26f",
+                        "p2p_verify_url": "aHR0cDovL3Y5LXhnLXdlYi1wYy5peGlndWEuY29tLzNkY2E5ODczYTc1OWRhOGFkYThlMjg5NGZkYjU3ZWM3LzYzYzBlNGNkL3ZpZGVvL3Rvcy9jbi90b3MtY24tdmUtMDAyNi9iMDE5YWY1OGQ3YTc0NmIyYmFiMTY3MTBjNmI0NmQ4Yi8="
+                    }
+                },
+                "volume": {
+                    "loudness": -8.2,
+                    "peak": 1
+                },
+                "popularity_level": 0,
+                "subtitle_langs": [
+                    1
+                ],
+                "subtitle_infos": [
+                    {
+                        "sub_id": -1839734823,
+                        "language_id": 1,
+                        "format": "webvtt",
+                        "version": "ASR",
+                        "size": 1237
+                    }
+                ],
+                "has_embedded_subtitle": true,
+                "poster_url": "http://p26-sign.douyinpic.com/tos-cn-p-0026/ooGIUtIAI4AeGDe89VmGLfbhv9nBCEkQ0EBOkf~tplv-noop.image?x-expires=1673585869&x-signature=Z45A%2F8ZtMqAhcqtHXCmnzFXZuR4%3D",
+                "extraInfos": {
+                    "Status": "10",
+                    "Message": "success",
+                    "LogoType": "xigua",
+                    "VideoModelVersion": 1,
+                    "HelpInfoURL": "",
+                    "LengthOfVideoList": "5",
+                    "IsDynamicVideo": false,
+                    "UserAction": "VL0",
+                    "AccountName": "xigua",
+                    "DeniedVideoModelV1JSON": "{\"status\":2002,\"message\":\"video_play acl deny\",\"enable_ssl\":false,\"auto_definition\":\"\",\"enable_adaptive\":false,\"video_id\":\"v0201ag10000cevuurbc77u5p44hk31g\",\"video_duration\":0,\"media_type\":\"\",\"popularity_level\":0,\"has_embedded_subtitle\":false}",
+                    "ResTag": "",
+                    "EncodeUserTag": ""
+                },
+                "refreshToken": "7b5f10bcf1e0ccf356bf008c1cadd123818064f32e34f23c9e1a7381e2583a524c3e27bd55899ed41f7e02f037c1521206d64a50547bbc26c50d99ec5f5a479d6e6836bf10f1a62e94fc206bc01da2f9bfd5369d49d14e50cd5f9aaee6dd476d1ba96f2c4c4dc50fd4d9ef0950ba4850_9b2b3c9db61d49eb7042772a7d4e0cc1_578e9927defabc598afc0134ab85d511b64e09374d509dba624f3f986bf7ff68",
+                "interfaceInfo": {
+                    "code": 10,
+                    "message": "success",
+                    "logid": "202301131156485DA8FA185288EE306C45",
+                    "api_str": "isLVideo=false&isDash=false",
+                    "timestamep": 1673582208586
+                }
+            }
+        },
+        "IsExclusive": false,
+        "IsCopyright": false,
+        "ShareIFrameInfo": {
+            "InAllowList": false,
+            "InBanList": false,
+            "BanByVL": false
+        }
+    }
+}

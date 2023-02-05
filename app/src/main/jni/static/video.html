@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="video.css">
+</head>
+
+<body>
+    <div></div>
+    <div bind="middleWrapper" style="z-index: 1;">
+        <div bind="play" @click="onPlay"
+            style="height: 56px;width: 56px;margin: 0 60px;color: #fff;fill: currentColor;">
+            <svg style="width:100%;height:100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+
+                <path d="M6,4l12,8L6,20V4z"></path>
+
+            </svg>
+        </div>
+    </div>
+    <div bind="bottomWrapper" style="z-index: 1;box-sizing: border-box;padding: 0 12px;width: 100%;">
+        <div bind="progress" @click="onProgress" style="position: relative;width: 100%;height: 48px;">
+            <div style="font-size: 12px;font-weight: 500;color: #fff;position: absolute;top: -14px;">
+                <span bind="timeStart">0:00</span>
+                <span style="margin: 0 4px;color: rgba(255, 255, 255, .7);">/</span>
+                <span bind="timeEnd" style="color: rgba(255, 255, 255, .7);">0:00</span>
+            </div>
+            <div
+                style="height: 3px;background: rgba(255, 255, 255, .3);position: absolute;top: 50%; transform: translateY(-50%);left: 0;right: 0;">
+            </div>
+            <div bind="loaded"
+                style="height: 3px;background: rgba(255, 255, 255, .6);position: absolute;top: 50%; transform: translateY(-50%);">
+            </div>
+            <div bind="played"
+                style="height: 3px;background: #f00;position: absolute;top: 50%; transform: translateY(-50%);">
+            </div>
+        </div>
+
+    </div>
+    <video bind="video" @abort="onAbortHanlder" @canplay="onCanplayHanlder" @canplaythrough="onCanplaythroughHanlder"
+        @durationchange="onDurationchangeHanlder" @emptied="onEmptiedHanlder" @ended="onEndedHanlder"
+        @error="onErrorHanlder" @loadeddata="onLoadeddataHanlder" @loadedmetadata="onLoadedmetadataHanlder"
+        @loadstart="onLoadstartHanlder" @pause="onPauseHanlder" @play="onPlayHanlder" @playing="onPlayingHanlder"
+        @progress="onProgressHanlder" @ratechange="onRatechangeHanlder" @resize="onResizeHanlder"
+        @seeked="onSeekedHanlder" @seeking="onSeekingHanlder" @stalled="onStalledHanlder" @suspend="onSuspendHanlder"
+        @timeupdate="onTimeupdateHanlder" @volumechange="onVolumechangeHanlder" @waiting="onWaitingHanlder"></video>
+    <script src="video.js"></script>
+
+</body>
+
+</html>

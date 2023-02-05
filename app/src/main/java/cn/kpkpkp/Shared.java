@@ -28,6 +28,7 @@ import android.widget.EditText;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.Closeable;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -61,6 +62,10 @@ import static java.lang.Math.min;
 
 public class Shared {
 
+    // 操作成功
+    public static final int SUCCESS = 0;
+    // 换行符
+    private static final String LINE_SEP = System.getProperty("line.separator");
     private static final String TAG = "";
     private static final String TIME_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(TIME_DATE_PATTERN, new Locale("en"));
@@ -167,6 +172,74 @@ public class Shared {
             }
         }
         return null;
+    }
+
+    public static CommandResult execCmd(final String[] commands, final boolean isRoot, final boolean isNeedResultMsg) {
+        int result = -1;
+        if (commands == null || commands.length == 0) {
+            return new CommandResult(result, null, null);
+        }
+        Process process = null;
+        BufferedReader successResult = null;
+        BufferedReader errorResult = null;
+        StringBuilder successMsg = null;
+        StringBuilder errorMsg = null;
+        DataOutputStream os = null;
+        try {
+            process = Runtime.getRuntime().exec(isRoot ? "su" : "sh");
+            os = new DataOutputStream(process.getOutputStream());
+            for (String command : commands) {
+                if (command == null) continue;
+                os.write(command.getBytes());
+                os.writeBytes(LINE_SEP);
+                os.flush();
+            }
+            os.writeBytes("exit" + LINE_SEP);
+            os.flush();
+            result = process.waitFor();
+            if (isNeedResultMsg) {
+                successMsg = new StringBuilder();
+                errorMsg = new StringBuilder();
+                successResult = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
+                errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream(), "UTF-8"));
+                String line;
+                if ((line = successResult.readLine()) != null) {
+                    successMsg.append(line);
+                    while ((line = successResult.readLine()) != null) {
+                        successMsg.append(LINE_SEP).append(line);
+                    }
+                }
+                if ((line = errorResult.readLine()) != null) {
+                    errorMsg.append(line);
+                    while ((line = errorResult.readLine()) != null) {
+                        errorMsg.append(LINE_SEP).append(line);
+                    }
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            try {
+                os.close();
+                successResult.close();
+                errorResult.close();
+            } catch (Exception e) {
+            }
+            if (process != null) {
+                process.destroy();
+            }
+        }
+        return new CommandResult(
+                result,
+                successMsg == null ? null : successMsg.toString(),
+                errorMsg == null ? null : errorMsg.toString());
+    }
+
+    public static CommandResult execCmd(final String[] commands, final boolean isRoot) {
+        return execCmd(commands, isRoot, true);
+    }
+
+    public static CommandResult execCmd(final String command, final boolean isRoot) {
+        return execCmd(new String[]{command}, isRoot, true);
     }
 
     public static int getActionBarHeight(Context context) {
@@ -332,6 +405,18 @@ public class Shared {
         }
     }
 
+    public static boolean isDeviceRooted() {
+        String su = "su";
+        String[] locations = {"/system/bin/", "/system/xbin/", "/sbin/", "/system/sd/xbin/",
+                "/system/bin/failsafe/", "/data/local/xbin/", "/data/local/bin/", "/data/local/"};
+        for (String location : locations) {
+            if (new File(location + su).exists()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void log(String filename, String... texts) {
         synchronized (sLock) {
             Date now = new Date();
@@ -480,6 +565,17 @@ public class Shared {
         return null;
     }
 
+    public static void requestAccessibilityPermission(Context ct, Class service) {
+        String cmd1 = "settings put secure enabled_accessibility_services  " + ct.getPackageName() + "/" + service.getName();
+        String cmd2 = "settings put secure accessibility_enabled 1";
+        String[] cmds = new String[]{cmd1, cmd2};
+        execCmd(cmds, true);
+    }
+
+    public static void requestRoot() {
+        execCmd("exit", true);
+    }
+
     public static Bitmap resizeAndCropCenter(Bitmap bitmap, int size, boolean recycle) {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
@@ -586,5 +682,69 @@ https://android.googlesource.com/platform/tools/tradefederation/+/ae241fc/src/co
      */
     public interface Listener {
         void onSuccess(String value);
+    }
+
+    public static class CommandResult {
+
+        // 结果码
+        public int result;
+        // 成功信息
+        public String successMsg;
+        // 错误信息
+        public String errorMsg;
+
+        public CommandResult(final int result, final String successMsg, final String errorMsg) {
+            this.result = result;
+            this.successMsg = successMsg;
+            this.errorMsg = errorMsg;
+        }
+
+        /**
+         * 判断是否执行成功
+         *
+         * @return
+         */
+        public boolean isSuccess() {
+            return result == SUCCESS;
+        }
+
+        /**
+         * 判断是否执行成功(判断 errorMsg)
+         *
+         * @return
+         */
+        public boolean isSuccess2() {
+            if (result == SUCCESS && (errorMsg == null || errorMsg.length() == 0)) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * 判断是否执行成功(判断 successMsg)
+         *
+         * @return
+         */
+        public boolean isSuccess3() {
+            if (result == SUCCESS && successMsg != null && successMsg.length() != 0) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * 判断是否执行成功(判断 successMsg) , 并且 successMsg 是否包含某个字符串
+         *
+         * @param contains
+         * @return
+         */
+        public boolean isSuccess4(final String contains) {
+            if (result == SUCCESS && successMsg != null && successMsg.length() != 0) {
+                if (contains != null && contains.length() != 0 && successMsg.toLowerCase().contains(contains)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
