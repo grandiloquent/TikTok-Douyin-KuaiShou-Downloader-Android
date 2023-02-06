@@ -1,15 +1,4 @@
 
-document.querySelectorAll('[bind]').forEach(element => {
-  if (element.getAttribute('bind')) {
-    window[element.getAttribute('bind')] = element;
-  }
-  [...element.attributes].filter(attr => attr.nodeName.startsWith('@')).forEach(attr => {
-    if (!attr.value) return;
-    element.addEventListener(attr.nodeName.slice(1), evt => {
-      window[attr.value](evt);
-    });
-  });
-})
 customElements.whenDefined('custom-buttons').then(() => {
   customButtons.data = [
     {
@@ -113,10 +102,6 @@ customElements.whenDefined('custom-dialog-actions').then(() => {
   ]
 })
 
-function showDrawer(evt) {
-  evt.stopPropagation();
-  customDrawer.setAttribute('expand', 'true');
-}
 function onCustomDrawer(evt) {
   location.href = evt.detail;
 }
@@ -132,6 +117,18 @@ customElements.whenDefined('custom-drawer').then(() => {
     href: "/editor?id=112",
     divider: true
   }, {
+    path: `<path d="M15.047 11.25q0.938-0.938 0.938-2.25 0-1.641-1.172-2.813t-2.813-1.172-2.813 1.172-1.172 2.813h1.969q0-0.797 0.609-1.406t1.406-0.609 1.406 0.609 0.609 1.406-0.609 1.406l-1.219 1.266q-1.172 1.266-1.172 2.813v0.516h1.969q0-1.547 1.172-2.813zM12.984 18.984v-1.969h-1.969v1.969h1.969zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z"></path>      `,
+    name: "优化资源",
+    href: "/api/boost",
+    divider: true
+  },
+  {
+    path: `<path d="M15.047 11.25q0.938-0.938 0.938-2.25 0-1.641-1.172-2.813t-2.813-1.172-2.813 1.172-1.172 2.813h1.969q0-0.797 0.609-1.406t1.406-0.609 1.406 0.609 0.609 1.406-0.609 1.406l-1.219 1.266q-1.172 1.266-1.172 2.813v0.516h1.969q0-1.547 1.172-2.813zM12.984 18.984v-1.969h-1.969v1.969h1.969zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z"></path>      `,
+    name: "关闭电报应用",
+    href: "/api/cmd?q=su+-c+am+force-stop+org.telegram.messenger",
+    divider: true
+  },
+  {
     path: `<path d="M12.516 12.984q0-1.078 1.5-2.391t1.5-2.578q0-1.641-1.195-2.836t-2.836-1.195-2.813 1.195-1.172 2.836h2.016q0-0.797 0.586-1.406t1.383-0.609 1.406 0.609 0.609 1.406q0 0.656-0.469 1.172t-1.031 0.844-1.031 1.102-0.469 1.852h2.016zM12.516 16.5v-2.016h-2.016v2.016h2.016zM11.484 2.016q3.516 0 6.023 2.484t2.508 6q0 3.422-2.203 6.586t-5.813 4.898v-3h-0.516q-3.516 0-6-2.484t-2.484-6 2.484-6 6-2.484z"></path>`,
     name: "联系我们",
     href: "/message"
@@ -171,31 +168,31 @@ async function onButtonsHandler(evt) {
   switch (evt.detail) {
     case 0:
       await render(1, l, o);
-      window.history.replaceState(null, null, "?t=1");
+      window.history.pushState(null, null, "?t=1");
       break;
     case 1:
       await render(-2, l, o);
-      window.history.replaceState(null, null, "?t=-2");
+      window.history.pushState(null, null, "?t=-2");
       break;
     case 2:
       await render(3, l, o);
-      window.history.replaceState(null, null, "?t=3");
+      window.history.pushState(null, null, "?t=3");
       break;
     case 3:
       await render(5, l, o);
-      window.history.replaceState(null, null, "?t=5");
+      window.history.pushState(null, null, "?t=5");
       break;
     case 4:
       await render(4, l, o);
-      window.history.replaceState(null, null, "?t=4");
+      window.history.pushState(null, null, "?t=4");
       break; 5
     case 5:
       await render(2, l, o);
-      window.history.replaceState(null, null, "?t=2");
+      window.history.pushState(null, null, "?t=2");
       break;
     case 9:
       await render(-1, l, o);
-      window.history.replaceState(null, null, "?t=-1");
+      window.history.pushState(null, null, "?t=-1");
       break;
   }
 }
@@ -458,7 +455,7 @@ async function writeText(strings) {
 //////////////////////////////////////
 let baseUri = window.location.host === '127.0.0.1:5500' ? 'http://192.168.0.109:10808' : '';
 
-const t = new URL(window.location).searchParams.get("t") || "1";
+let t = new URL(window.location).searchParams.get("t") || "1";
 let l = 20, o = 0, intersectionObserver, s = parseInt(window.localStorage.getItem("order") || "0");
 customElements.whenDefined('custom-buttons').then(() => {
   if (t === "1") {
@@ -487,34 +484,29 @@ customElements.whenDefined('custom-buttons').then(() => {
 render(t, l, o);
 
 
-var dropZone = document.querySelector('body');
-dropZone.addEventListener('dragover', function (e) {
-    e.stopPropagation();
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy'
+window.addEventListener("popstate", function (e) {
+  t = new URL(window.location).searchParams.get("t") || "1";
+  customItems.data = [];
+  if (t === "1") {
+    customButtons.selected = 0;
+  }
+  if (t === "-2") {
+    customButtons.selected = 1;
+  }
+  if (t === "3") {
+    customButtons.selected = 2;
+  }
+  if (t === "5") {
+    customButtons.selected = 3;
+  }
+  if (t === "4") {
+    customButtons.selected = 4;
+  }
+  if (t === "2") {
+    customButtons.selected = 5;
+  }
+  if (t === "-1") {
+    customButtons.selected = 9;
+  }
+  render(t, l,0);
 });
-dropZone.addEventListener('drop', function (e) {
-    e.stopPropagation();
-    e.preventDefault();
-    uploadFiles(e.dataTransfer.files)
-});
-
-async function uploadFiles(files) {
-    document.querySelector('.dialog').className = 'dialog dialog-show';
-    const dialogContext = document.querySelector('.dialog-content span');
-    const length = files.length;
-    let i = 1;
-    for (let file of files) {
-        dialogContext.textContent = `正在上传 (${i++}/${length}) ${file.name} ...`;
-        const formData = new FormData;
-        formData.append('file', file, file.name);
-        try {
-            await fetch(`${baseUri}/post`, {
-                method: "POST",
-                body: formData
-            }).then(res => console.log(res))
-        } catch (e) {
-        }
-    }
-    document.querySelector('.dialog').className = 'dialog'
-}

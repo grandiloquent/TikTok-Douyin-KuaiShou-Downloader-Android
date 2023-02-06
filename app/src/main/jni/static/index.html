@@ -17,7 +17,7 @@
     <script type="module" src="custom-dialog.js"></script>
     <script src="toast.js"></script>
     <script type="module" src="custom-dialog-spinner.js"></script>
-      
+
 </head>
 
 <body>
@@ -38,8 +38,8 @@
     </custom-dialog-actions>
     <custom-dialog bind="customDialog" @submit="onDialogHandler" style="display:none;"></custom-dialog>
     <custom-toast bind="customToast"></custom-toast>
-    <custom-dialog-spinner bind="customDialogSpinner" style="display:none;" ></custom-dialog-spinner>
-    <script src="index.js"></script>
+    <custom-dialog-spinner bind="customDialogSpinner" style="display:none;"></custom-dialog-spinner>
+
     <style>
         .dialog-mask {
             position: fixed;
@@ -164,6 +164,62 @@
             </div>
         </div>
     </div>
+    <script>
+
+        var dropZone = document.querySelector('body');
+        dropZone.addEventListener('dragover', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy'
+        });
+        dropZone.addEventListener('drop', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            uploadFiles(e.dataTransfer.files)
+        });
+
+        async function uploadFiles(files) {
+            document.querySelector('.dialog').className = 'dialog dialog-show';
+            const dialogContext = document.querySelector('.dialog-content span');
+            const length = files.length;
+            let i = 1;
+            for (let file of files) {
+                dialogContext.textContent = `正在上传 (${i++}/${length}) ${file.name} ...`;
+                const formData = new FormData;
+                formData.append('file', file, file.name);
+                try {
+                    await fetch(`${baseUri}/post`, {
+                        method: "POST",
+                        body: formData
+                    }).then(res => console.log(res))
+                } catch (e) {
+                }
+            }
+            document.querySelector('.dialog').className = 'dialog'
+        }
+    </script>
+    <script>
+
+        document.querySelectorAll('[bind]').forEach(element => {
+            if (element.getAttribute('bind')) {
+                window[element.getAttribute('bind')] = element;
+            }
+            [...element.attributes].filter(attr => attr.nodeName.startsWith('@')).forEach(attr => {
+                if (!attr.value) return;
+                element.addEventListener(attr.nodeName.slice(1), evt => {
+                    window[attr.value](evt);
+                });
+            });
+        })
+        
+function showDrawer(evt) {
+  evt.stopPropagation();
+  customDrawer.setAttribute('expand', 'true');
+}
+
+    </script>
+    <script src="index.js"></script>
+
 </body>
 
 </html>
