@@ -585,6 +585,9 @@ document.addEventListener('keydown', async evt => {
         } else if (evt.key === 'p') {
             evt.preventDefault();
             onPreview();
+        }else if (evt.key === 'l') {
+            evt.preventDefault();
+            onCode()
         } else if (evt.key === '1') {
             evt.preventDefault();
             const pv = findCodeBlock(textarea);
