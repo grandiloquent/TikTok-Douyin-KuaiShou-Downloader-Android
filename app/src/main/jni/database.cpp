@@ -15,6 +15,7 @@ kp::database::database(std::string &directory) {
     if (ret != SQLITE_OK) {
         // sqlite3_errmsg
     }
+    //sqlite3_exec(note,"delete from tag where name=\"|After Effects\"",nullptr, nullptr, nullptr);
 }
 
 std::string kp::database::insertVideo(
