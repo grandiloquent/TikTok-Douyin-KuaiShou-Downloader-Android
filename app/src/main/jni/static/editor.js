@@ -213,13 +213,13 @@ async function onSave() {
 async function onTranslateChinese() {
     let array1 = getLine();
     textarea.setRangeText(`\n\n${await translate(array1[0], 'zh')}
-          `, array1[1], array1[2], 'end');
+          `, array1[2], array1[2], 'end');
 }
 
 async function onTranslateEnglish() {
     let array1 = getLine();
     textarea.setRangeText(`\n\n${await translate(array1[0], 'en')}
-          `, array1[1], array1[2], 'end');
+          `, array1[2], array1[2], 'end');
 }
 
 async function pasteCode() {
@@ -236,15 +236,23 @@ ${strings}
 `, textarea.selectionStart, textarea.selectionEnd, 'end');
 }
 
-function readText() {
-    const textarea = document.createElement("textarea");
-    textarea.style.position = 'fixed';
-    textarea.style.right = '100%';
-    document.body.appendChild(textarea);
-    textarea.value = message;
-    textarea.select();
-    document.execCommand('paste');
-    return textarea.value;
+async function readText() {
+    // const textarea = document.createElement("textarea");
+    // textarea.style.position = 'fixed';
+    // textarea.style.right = '100%';
+    // document.body.appendChild(textarea);
+    // textarea.value = message;
+    // textarea.select();
+    // document.execCommand('paste');
+    // return textarea.value;
+
+    let strings;
+    if (typeof NativeAndroid !== 'undefined') {
+        strings = NativeAndroid.readText()
+    } else {
+        strings = await navigator.clipboard.readText()
+    }
+    return strings
 }
 
 async function removeLines() {
@@ -541,6 +549,9 @@ customElements.whenDefined('custom-bottom-sheet').then(() => {
     }, {
         id: 2,
         title: "预览"
+    }, {
+        id: 6,
+        title: "执行代码"
     }]
 })
 function onCustomBottomSheet(evt) {
@@ -560,6 +571,9 @@ function onCustomBottomSheet(evt) {
             break;
         case "5":
             onCode();
+            break;
+        case "6":
+            onEval();
             break;
 
     }
@@ -585,7 +599,13 @@ document.addEventListener('keydown', async evt => {
         } else if (evt.key === 'p') {
             evt.preventDefault();
             onPreview();
-        }else if (evt.key === 'l') {
+        } else if (evt.key === 'k') {
+            evt.preventDefault();
+            insertLink();
+        } else if (evt.key === 'e') {
+            evt.preventDefault();
+            onEval();
+        } else if (evt.key === 'l') {
             evt.preventDefault();
             onCode()
         } else if (evt.key === '1') {
@@ -600,7 +620,27 @@ document.addEventListener('keydown', async evt => {
     }
 });
 
+async function insertLink() {
+    const strings = await readText();
+    const name = substringAfterLast('#');
+    textarea.setRangeText(
+        `- [${name}](${strings})`,
+        textarea.selectionStart,
+        textarea.selectionEnd,
+        'end'
+    )
+}
+async function onEval() {
+    const p = findBlock(textarea);
+    const s = textarea.value.substring(p[0], p[1]);
 
+    textarea.setRangeText(
+        ` = ${eval(s)}`,
+        p[1],
+        p[1],
+        'end'
+    )
+}
 function copyLine(editor, count) {
     const start = editor.selectionStart;
     const end = editor.selectionEnd;
