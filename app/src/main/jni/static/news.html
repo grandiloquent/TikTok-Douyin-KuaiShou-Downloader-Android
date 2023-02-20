@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻</title>
+    <style>
+        html {
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            height: 100%;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            color: rgba(0, 0, 0, .87);
+            font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+            margin: 0;
+            text-size-adjust: 100%
+        }
+
+        textarea {
+            font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif
+        }
+
+        a {
+            text-decoration: none;
+            color: #2962ff
+        }
+
+        img {
+            border: none
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .source:after {
+            content: "\0000a0\002022\0000a0";
+            padding-right: 8px;
+            padding-left: 6px
+        }
+
+        .container {
+            overflow-y: scroll;
+            height: 100%;
+            padding: 8px 16px 16px 16px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div
+            style="-webkit-box-align: center;align-items: center;border-bottom: 1px solid #dadce0;margin: -12px -16px 0;padding: 8px 16px">
+            <div style="display: flex;width: 100%;-webkit-box-pack: justify;justify-content: space-between">
+                <div
+                    style="letter-spacing: .07272727em;font-family: Roboto,Arial,sans-serif;font-size: .6875rem;font-weight: 500;line-height: 1rem;text-transform: uppercase;display: flex;color: #202124;margin: 0;margin-top: 8px">
+                </div>
+                <div style="display: inline-flex;-webkit-box-align: center;align-items: center;height: 32px">
+                    <div class="next"
+                        style="-webkit-font-smoothing: antialiased;font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;text-size-adjust: 100%;-webkit-user-select: none;transition: background .3s;border: 0;border-radius: 50%;color: #444;cursor: pointer;display: inline-block;fill: #444;flex-shrink: 0;outline: none;overflow: hidden;position: relative;text-align: center;-webkit-tap-highlight-color: transparent;z-index: 0;margin: 0;border-width: 0;box-shadow: 0px 1px 2px 0px rgba(60,64,67,.30),0px 1px 3px 1px rgba(60,64,67,.15);height: 32px;margin-top: 4px;width: 32px">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="items"></div>
+    </div>
+    <script>
+
+        function timeAgo(time, onlyDate) {
+            var stamp = new Date().getTime() - new Date(time).getTime();
+
+            //超过30天，返回具体日期
+            if (stamp > 1000 * 60 * 60 * 24 * 30) {
+                stamp = new Date(time).toLocaleString();
+                onlyDate && (stamp = stamp.replace(/\s[\S]+$/g, ''));
+                return stamp;
+            }
+
+            //30天以内，返回“多久前”
+            if (stamp >= 1000 * 60 * 60 * 24) {
+                return ((stamp / 1000 / 60 / 60 / 24) | 0) + '天前';
+            } else if (stamp >= 1000 * 60 * 60) {
+                return ((stamp / 1000 / 60 / 60) | 0) + '小时前';
+            } else if (stamp >= 1000 * 60 * 3) { //3分钟以内为：刚刚
+                return ((stamp / 1000 / 60) | 0) + '分钟前';
+            } else if (stamp < 0) {
+                return '未来';
+            } else {
+                return '刚刚';
+            }
+        }
+        function render(element, data) {
+            element.innerHTML = '';
+            data.forEach(value => {
+
+                const div = document.createElement('div');
+                div.innerHTML = `<div style="webkit-tap-highlight-color: transparent;border-top: 1px solid #e8eaed;display: block;padding: 12px 0">
+        <div style="display: flex;-webkit-box-orient: horizontal;flex-direction: row">
+            <div style="flex-grow: 1">
+                <a href="${value.sourceUrl}">
+                    <div
+                        style="-webkit-box-orient: horizontal;flex-direction: row;letter-spacing: .025em;font-family: Roboto,Arial,sans-serif;font-size: .75rem;font-weight: 400;line-height: 1rem;color: #5f6368;display: flex;flex-wrap: wrap">
+                        <div class="source" style="font-weight: 500">
+                        ${value.source.name}
+                            </div>
+                        <div style="display: inline-flex">
+                            ${timeAgo(value.publishedAt)}
+                        </div>
+                    </div>
+                    <div style="letter-spacing: .00625em;font-family: Roboto,Arial,sans-serif;font-size:
+                        1rem;line-height: 1.5rem;font-weight: 400;color: #202124;padding-top: 8px">
+                    ${value.title}
+                        </div>
+                </a>
+            </div>
+            <a>
+                <img
+                src="${value.imageUrl}"
+                    style="border: none;border-radius: 8px;object-fit: cover;align-self: end;margin-left: 16px;height: 80px;width: 120px">
+            </a>
+        </div>
+    </div>`;
+                element.appendChild(div);
+            })
+        }
+        let baseUri = window.location.host === '127.0.0.1:5500' ? 'http://192.168.8.55:10808' : '';
+
+        async function loadData(from, size) {
+            const res = await fetch(`${baseUri}/api/news?from=${from}&size=${size}`);
+            const data = await res.json();
+            render(document.querySelector('.items'), data.articles);
+        }
+        let start = 50;
+        loadData(0, 50);
+        document.querySelector('.next').addEventListener('click', evt => {
+            loadData(start, 50);
+            start += 50;
+        })
+    </script>
+</body>
+
+</html>

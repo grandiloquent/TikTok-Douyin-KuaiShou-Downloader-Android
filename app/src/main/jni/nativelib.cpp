@@ -4,6 +4,7 @@
 #include "editor.h"
 #include "notes.h"
 #include "markdown.h"
+#include "news.h"
 #include "handlers/image.h"
 #include "handlers/kuaishou.h"
 #include "handlers/listVideos.h"
@@ -80,6 +81,43 @@ static bool RunCommand(const std::string &cmd, std::ostream *os, const char *pre
     }
 }
 
+std::string GetNewsFeed(const std::string &from, const std::string &size) {
+    httplib::SSLClient cli("api.newsfilter.io", 443);
+    cli.enable_server_certificate_verification(false);
+    httplib::Headers headers = {{
+                                        "User-Agent",
+                                        "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.56 Mobile Safari/537.36"
+                                },
+                                {
+                                        "Content-Type",
+                                        "application/json"
+                                }};
+    nlohmann::json js = {
+            // zacks accesswire barrons globenewswire businesswire prNewswire  benzinga
+            // seekingAlpha bloomberg cnbc
+            // https://developers.newsfilter.io/docs/news-query-api-request-response-formats.html
+            {"type", "filterArticles"},
+            {
+             "queryString",
+                     "source.id: (reuters)"
+            },
+            {
+             "from", from,
+            },
+            {
+             "size",size
+            }
+    };
+    auto body = js.dump();
+    if (auto res = cli.Post(
+            "/public/actions?token=vgkjaxk2tiebiudhkjirhnaozaeeoiw4ikdpsrolbeoeadfeph09sjfzsaog5bzi",
+            headers, body, "application/json")) {
+        return res->body;
+    } else {
+        return {};
+    }
+}
+
 extern "C" JNICALL jboolean Java_cn_kpkpkp_ServerService_startServer(
         JNIEnv *env, jclass obj, jobject context, jstring ip, jint port) {
     const std::string host = jsonparse::jni::Convert<std::string>::from(env, ip);
@@ -131,6 +169,9 @@ extern "C" JNICALL jboolean Java_cn_kpkpkp_ServerService_startServer(
     });
     server.Get("/markdown", [](const httplib::Request &req, httplib::Response &res) {
         res.set_content(MARKDOWN, "text/html");
+    });
+    server.Get("/news", [](const httplib::Request &req, httplib::Response &res) {
+        res.set_content(NEWS, "text/html");
     });
     server.Get("/api/tiktok", [&db1](const httplib::Request &request,
                                      httplib::Response &response) {
@@ -274,6 +315,19 @@ extern "C" JNICALL jboolean Java_cn_kpkpkp_ServerService_startServer(
             system(("su -c am force-stop " + n).c_str());
         }
         res.set_content("OK", "text/plain");
+    });
+    server.Get("/api/news", [](const httplib::Request &req, httplib::Response &res) {
+        res.set_header("Access-Control-Allow-Origin", "*");
+
+        auto from = req.get_param_value("from");
+        if (from.empty()) {
+            from = "0";
+        }
+        auto size = req.get_param_value("size");
+        if (size.empty()) {
+            size = "50";
+        }
+        res.set_content(GetNewsFeed(from, size), "application/json");
     });
     server.listen(host, port);
     return false;
