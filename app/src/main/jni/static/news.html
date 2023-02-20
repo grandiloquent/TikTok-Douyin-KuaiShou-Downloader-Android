@@ -68,6 +68,7 @@
                 </div>
             </div>
         </div>
+        <div class="videos"></div>
         <div class="items"></div>
     </div>
     <script>
@@ -136,6 +137,43 @@
             const data = await res.json();
             render(document.querySelector('.items'), data.articles);
         }
+        async function loadVideos() {
+            const res = await fetch(`${baseUri}/api/news-videos`);
+            const data = await res.json();
+            const element=document.querySelector('.videos');
+            data.subCards.forEach(value => {
+
+                const div = document.createElement('div');
+                div.innerHTML = `<div style="webkit-tap-highlight-color: transparent;border-top: 1px solid #e8eaed;display: block;padding: 12px 0">
+<div style="display: flex;-webkit-box-orient: horizontal;flex-direction: row">
+<div style="flex-grow: 1">
+<a href="${value.url}">
+    <div
+        style="-webkit-box-orient: horizontal;flex-direction: row;letter-spacing: .025em;font-family: Roboto,Arial,sans-serif;font-size: .75rem;font-weight: 400;line-height: 1rem;color: #5f6368;display: flex;flex-wrap: wrap">
+        <div class="source" style="font-weight: 500">
+        ${value.provider.name}
+            </div>
+        <div style="display: inline-flex">
+            ${timeAgo(value.publishedDateTime)}
+        </div>
+    </div>
+    <div style="letter-spacing: .00625em;font-family: Roboto,Arial,sans-serif;font-size:
+        1rem;line-height: 1.5rem;font-weight: 400;color: #202124;padding-top: 8px">
+    ${value.abstract}
+        </div>
+</a>
+</div>
+<a>
+<img
+src="${value.imageUrl}"
+    style="border: none;border-radius: 8px;object-fit: cover;align-self: end;margin-left: 16px;height: 80px;width: 120px">
+</a>
+</div>
+</div>`;
+                element.appendChild(div);
+            })
+        }
+        loadVideos();
         let start = 50;
         loadData(0, 50);
         document.querySelector('.next').addEventListener('click', evt => {

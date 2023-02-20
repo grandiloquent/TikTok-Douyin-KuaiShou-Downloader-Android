@@ -118,6 +118,24 @@ std::string GetNewsFeed(const std::string &from, const std::string &size) {
     }
 }
 
+std::string GetNewsVideos() {
+    httplib::SSLClient cli("assets.msn.com", 443);
+    // https://assets.msn.com/service/MSN/Feed/me?$top=30&DisableTypeSerialization=true&activityId=E2756561-0DE1-4B9D-80A0-30F3829D2A98&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentId=AA17ubHB&contentType=video&location=41.2732|-75.8905&query=news%20video&queryType=myfeed&responseSchema=cardview&timeOut=1000&user=m-108D5A0585D565421229482584516419&wrapodata=false
+
+    cli.enable_server_certificate_verification(false);
+    httplib::Headers headers = {{
+                                        "User-Agent",
+                                        "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.56 Mobile Safari/537.36"
+                                }};
+
+    if (auto res = cli.Get(
+            "/service/MSN/Feed/me?$top=30&DisableTypeSerialization=true&activityId=E2756561-0DE1-4B9D-80A0-30F3829D2A98&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentId=AA17ubHB&contentType=video&location=41.2732|-75.8905&query=news%20video&queryType=myfeed&responseSchema=cardview&timeOut=1000&user=m-108D5A0585D565421229482584516419&wrapodata=false",
+            headers)) {
+        return res->body;
+    } else {
+        return {};
+    }
+}
 extern "C" JNICALL jboolean Java_cn_kpkpkp_ServerService_startServer(
         JNIEnv *env, jclass obj, jobject context, jstring ip, jint port) {
     const std::string host = jsonparse::jni::Convert<std::string>::from(env, ip);
@@ -328,6 +346,10 @@ extern "C" JNICALL jboolean Java_cn_kpkpkp_ServerService_startServer(
             size = "50";
         }
         res.set_content(GetNewsFeed(from, size), "application/json");
+    });
+    server.Get("/api/news-videos", [](const httplib::Request &req, httplib::Response &res) {
+        res.set_header("Access-Control-Allow-Origin", "*");
+        res.set_content(GetNewsVideos(), "application/json");
     });
     server.listen(host, port);
     return false;
