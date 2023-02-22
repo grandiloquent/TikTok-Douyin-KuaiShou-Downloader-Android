@@ -125,7 +125,7 @@ class CustomHeader extends HTMLElement {
     wrapper.appendChild(left);
     const hamburgerMenu = document.createElement('div');
     hamburgerMenu.setAttribute("class", "hamburger-menu");
-   
+
     left.appendChild(hamburgerMenu);
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute("focusable", "false");
@@ -157,7 +157,10 @@ class CustomHeader extends HTMLElement {
     path3.setAttribute("fill", "none");
     svg1.appendChild(path3);
 
-    hamburgerMenu.addEventListener('click',this.showDrawer.bind(this))
+    middle.addEventListener('click', evt => {
+      this.dispatchEvent(new CustomEvent('search'));
+    })
+    hamburgerMenu.addEventListener('click', this.showDrawer.bind(this))
     document.addEventListener("scroll", () => {
       this.showing = window.scrollY > 56;
     });
