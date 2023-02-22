@@ -622,7 +622,7 @@ document.addEventListener('keydown', async evt => {
 
 async function insertLink() {
     const strings = await readText();
-    const name = substringAfterLast('#');
+    const name = substringAfterLast(strings,'#');
     textarea.setRangeText(
         `- [${name}](${strings})`,
         textarea.selectionStart,
