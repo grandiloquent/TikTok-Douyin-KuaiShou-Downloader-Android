@@ -314,6 +314,10 @@ void handleNote(const httplib::Request &request, httplib::Response &response,
     } else if (action == "2") {
         auto ret = db.listNoteTags(nullptr);
         response.set_content(ret, "application/json");
+    } else if (action == "3") {
+        auto q = request.get_param_value("q");
+        auto ret = db.searchNotes(q);
+        response.set_content(ret, "application/json");
     }
 
 }

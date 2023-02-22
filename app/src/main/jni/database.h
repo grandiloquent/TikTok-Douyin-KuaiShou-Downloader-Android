@@ -45,6 +45,9 @@ namespace kp {
         listNotes(const std::function<std::string(sqlite3_stmt *)> &handler);
 
         std::string
+        searchNotes(const std::string &words);
+
+        std::string
         insertNote(const std::function<std::string(sqlite3_stmt *)> &handler);
 
         std::string
@@ -62,6 +65,7 @@ namespace kp {
         sqlite3_stmt *deleteVideoStmt = nullptr;
         sqlite3_stmt *updateVideoStmt = nullptr;
         sqlite3_stmt *listNotesStmt = nullptr;
+        sqlite3_stmt *searchNotesStmt = nullptr;
         sqlite3_stmt *insertNoteStmt = nullptr;
         sqlite3_stmt *listNoteTagsStmt = nullptr;
     };

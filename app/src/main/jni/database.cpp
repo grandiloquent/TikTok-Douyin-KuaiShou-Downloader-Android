@@ -173,6 +173,48 @@ std::string kp::database::listNotes(
     return doc.dump();
 }
 
+std::string kp::database::searchNotes(
+        const std::string &words) {
+    if (searchNotesStmt == nullptr) {
+        sqlite3_prepare_v2(
+                note,
+                "select notes._id,notes.title,notes.update_at,notes.content,tag.name from notes "
+                "JOIN note_tag on note_tag.note_id=notes._id "
+                "JOIN tag on tag._id=note_tag.tag_id "
+                "order by notes.update_at desc",
+                -1, &searchNotesStmt, nullptr);
+    }
+    std::regex reg(words);
+    std::smatch base_match;
+    nlohmann::json doc = nlohmann::json::array();
+    while (sqlite3_step(searchNotesStmt) == SQLITE_ROW) {
+        auto title = reinterpret_cast<const char *>(
+                sqlite3_column_text(searchNotesStmt, 1));
+        auto content = reinterpret_cast<const char *>(
+                sqlite3_column_text(searchNotesStmt, 3));
+        if (
+                std::regex_search(std::string{title},
+                             base_match, reg)
+            ||
+                std::regex_search(std::string{content},
+                                 base_match, reg)) {
+            nlohmann::json j = {{"id",        sqlite3_column_int(searchNotesStmt, 0)},
+                                {"title",     title},
+                                {"update_at", sqlite3_column_int64(searchNotesStmt, 2)},
+                                {"tag",      reinterpret_cast<const char *>(
+                                                     sqlite3_column_text(searchNotesStmt, 4))}
+        };
+        doc.push_back(j);
+    }
+
+}
+
+return doc.
+
+dump();
+
+}
+
 std::string kp::database::insertNote(
         const std::function<std::string(sqlite3_stmt *)> &handler) {
     if (insertNoteStmt == nullptr) {
@@ -201,9 +243,9 @@ kp::database::listNoteTags(const std::function<std::string(sqlite3_stmt *)> &han
     }
     nlohmann::json doc = nlohmann::json::array();
     while (sqlite3_step(listNoteTagsStmt) == SQLITE_ROW) {
-        nlohmann::json j = {{"id",   sqlite3_column_int(listNoteTagsStmt, 0)},
+        nlohmann::json j = {{"id",    sqlite3_column_int(listNoteTagsStmt, 0)},
                             {"title", reinterpret_cast<const char *>(
-                                             sqlite3_column_text(listNoteTagsStmt, 1))}
+                                              sqlite3_column_text(listNoteTagsStmt, 1))}
         };
         doc.push_back(j);
     }
