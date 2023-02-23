@@ -55,6 +55,14 @@
                 保存
             </div>
         </div>
+        <div bind @click="onSnippet" class="bar-item-renderer">
+            <svg viewBox="0 0 24 24">
+                <path d="M20.391 8.391l-4.828-4.828q-0.563-0.563-1.406-0.563h-9.141q-0.844 0-1.43 0.586t-0.586 1.43v13.969q0 0.844 0.586 1.43t1.43 0.586h13.969q0.844 0 1.43-0.586t0.586-1.43v-9.141q0-0.844-0.609-1.453zM6.984 6.984h7.031v2.016h-7.031v-2.016zM17.016 17.016h-10.031v-2.016h10.031v2.016zM17.016 12.984h-10.031v-1.969h10.031v1.969z"></path>
+            </svg>
+            <div class="bar-item-title">
+                代码段
+            </div>
+        </div>
         <div bind @click="onShow" class="bar-item-renderer">
             <svg viewBox="0 0 24 24">
                 <path d="M3 6h18v2.016h-18v-2.016zM3 12.984v-1.969h18v1.969h-18zM3 18v-2.016h18v2.016h-18z"></path>
@@ -68,6 +76,7 @@
     <custom-bottom-sheet bind="customBottomSheet" @submit="onCustomBottomSheet" style="display:none;">
     </custom-bottom-sheet>
     <script src="editor.js"></script>
+    
 </body>
 
 </html>
