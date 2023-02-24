@@ -195,7 +195,7 @@ std::string kp::database::searchNotes(
         auto matched=mode==1?std::regex_search(std::string{title},
                                                base_match, reg):
                      std::regex_search(std::string{title},
-                                       base_match, reg) && std::regex_search(std::string{content},
+                                       base_match, reg) || std::regex_search(std::string{content},
                                                                              base_match, reg);
         if (matched ) {
             nlohmann::json j = {{"id",        sqlite3_column_int(searchNotesStmt, 0)},
