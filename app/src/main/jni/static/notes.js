@@ -87,8 +87,13 @@ function onClose() {
 async function onInput(evt) {
   if (evt.key === "Enter") {
     evt.preventDefault();
-
-    const res = await fetch(`${baseUri}/api/note?action=3&q=${encodeURIComponent(input.value)}`);
+    let q = input.value;
+    let action = 3;
+    if (q.startsWith("*")) {
+      action = 4;
+      q = q.substring(1);
+    }
+    const res = await fetch(`${baseUri}/api/note?action=${action}&q=${encodeURIComponent(q)}`);
     const items = await res.json();
     this.wrapper.innerHTML = '';
     console.log(items);
@@ -110,8 +115,6 @@ async function onInput(evt) {
   }
 }
 
-function onSearch(){
-  console.log('------------')
-
+function onSearch() {
   searchWrapper.style.display = 'block'
 }

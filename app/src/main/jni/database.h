@@ -45,7 +45,7 @@ namespace kp {
         listNotes(const std::function<std::string(sqlite3_stmt *)> &handler);
 
         std::string
-        searchNotes(const std::string &words);
+        searchNotes(const std::string &words,int mode);
 
         std::string
         insertNote(const std::function<std::string(sqlite3_stmt *)> &handler);

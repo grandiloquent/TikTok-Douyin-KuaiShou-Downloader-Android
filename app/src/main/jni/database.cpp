@@ -174,7 +174,7 @@ std::string kp::database::listNotes(
 }
 
 std::string kp::database::searchNotes(
-        const std::string &words) {
+        const std::string &words,int mode) {
     if (searchNotesStmt == nullptr) {
         sqlite3_prepare_v2(
                 note,
@@ -192,12 +192,12 @@ std::string kp::database::searchNotes(
                 sqlite3_column_text(searchNotesStmt, 1));
         auto content = reinterpret_cast<const char *>(
                 sqlite3_column_text(searchNotesStmt, 3));
-        if (
-                std::regex_search(std::string{title},
-                             base_match, reg)
-            ||
-                std::regex_search(std::string{content},
-                                 base_match, reg)) {
+        auto matched=mode==1?std::regex_search(std::string{title},
+                                               base_match, reg):
+                     std::regex_search(std::string{title},
+                                       base_match, reg) && std::regex_search(std::string{content},
+                                                                             base_match, reg);
+        if (matched ) {
             nlohmann::json j = {{"id",        sqlite3_column_int(searchNotesStmt, 0)},
                                 {"title",     title},
                                 {"update_at", sqlite3_column_int64(searchNotesStmt, 2)},
