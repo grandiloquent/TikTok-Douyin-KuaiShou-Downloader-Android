@@ -154,17 +154,17 @@
                 div.innerHTML = `<div style="webkit-tap-highlight-color: transparent;border-top: 1px solid #e8eaed;display: block;padding: 12px 0">
 <div style="display: flex;-webkit-box-orient: horizontal;flex-direction: row">
 <div style="flex-grow: 1">
-<a class="link" href="${value.url}">
+<a class="link" >
     <div
         style="-webkit-box-orient: horizontal;flex-direction: row;letter-spacing: .025em;font-family: Roboto,Arial,sans-serif;font-size: .75rem;font-weight: 400;line-height: 1rem;color: #5f6368;display: flex;flex-wrap: wrap">
-        <div class="source" style="font-weight: 500">
+        <div class="source" data-href="${value.url}" style="font-weight: 500">
         ${value.provider.name}
             </div>
         <div style="display: inline-flex">
             ${timeAgo(value.publishedDateTime)}
         </div>
     </div>
-    <div style="letter-spacing: .00625em;font-family: Roboto,Arial,sans-serif;font-size:
+    <div class="item-content" style="letter-spacing: .00625em;font-family: Roboto,Arial,sans-serif;font-size:
         1rem;line-height: 1.5rem;font-weight: 400;color: #202124;padding-top: 8px">
     ${value.abstract}
         </div>
@@ -179,11 +179,18 @@ src="${value.images[0].url}" alt="${value.title}"
 </div>`;
                 element.appendChild(div);
             });
-            document.querySelectorAll('.videos .link')
+            document.querySelectorAll('.videos .source')
                 .forEach(x => {
                     x.addEventListener('click', async evt => {
                         evt.preventDefault();
-                        await writeText(/(?<=\/vi-)[a-zA-Z\d]+/.exec(x.href)[0]);
+                        await writeText(/(?<=\/vi-)[a-zA-Z\d]+/.exec(x.dataset.href)[0]);
+                    })
+                })
+                document.querySelectorAll('.videos .item-content')
+                .forEach(x => {
+                    x.addEventListener('click', async evt => {
+                        evt.preventDefault();
+                        await writeText(x.textContent.trim());
                     })
                 })
             document.querySelectorAll('.videos img')
