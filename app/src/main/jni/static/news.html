@@ -137,6 +137,13 @@
             const data = await res.json();
             render(document.querySelector('.items'), data.articles);
         }
+        async function writeText(strings) {
+            if (typeof NativeAndroid !== 'undefined')
+                NativeAndroid.writeText(strings);
+            else {
+                await navigator.clipboard.writeText(strings);
+            }
+        }
         async function loadVideos() {
             const res = await fetch(`${baseUri}/api/news-videos`);
             const data = await res.json();
@@ -165,22 +172,30 @@
 </div>
 <a>
 <img
-src="${value.imageUrl}"
+src="${value.images[0].url}" alt="${value.title}"
     style="border: none;border-radius: 8px;object-fit: cover;align-self: end;margin-left: 16px;height: 80px;width: 120px">
 </a>
 </div>
 </div>`;
                 element.appendChild(div);
-            })
+            });
+            document.querySelectorAll('.videos .link')
+                .forEach(x => {
+                    x.addEventListener('click', async evt => {
+                        evt.preventDefault();
+                        await writeText(/(?<=\/vi-)[a-zA-Z\d]+/.exec(x.href)[0]);
+                    })
+                })
+            document.querySelectorAll('.videos img')
+                .forEach(x => {
+                    x.addEventListener('click', async evt => {
+                        evt.preventDefault();
+                        await writeText(x.alt);
+                    })
+                })
         }
         loadVideos();
-       document.querySelectorAll('.videos .link')
-            .forEach(x => {
-                x.addEventListener('click', evt => {
-                    evt.preventDefault();
-                    navigator.clipboard.writeText(/(?<=\/vi-)[a-zA-Z\d]+/.exec(x.href)[0]);
-                })
-            })
+
         let start = 50;
         loadData(0, 50);
         document.querySelector('.next').addEventListener('click', evt => {
