@@ -140,14 +140,14 @@
         async function loadVideos() {
             const res = await fetch(`${baseUri}/api/news-videos`);
             const data = await res.json();
-            const element=document.querySelector('.videos');
+            const element = document.querySelector('.videos');
             data.subCards.forEach(value => {
 
                 const div = document.createElement('div');
                 div.innerHTML = `<div style="webkit-tap-highlight-color: transparent;border-top: 1px solid #e8eaed;display: block;padding: 12px 0">
 <div style="display: flex;-webkit-box-orient: horizontal;flex-direction: row">
 <div style="flex-grow: 1">
-<a href="${value.url}">
+<a class="link" href="${value.url}">
     <div
         style="-webkit-box-orient: horizontal;flex-direction: row;letter-spacing: .025em;font-family: Roboto,Arial,sans-serif;font-size: .75rem;font-weight: 400;line-height: 1rem;color: #5f6368;display: flex;flex-wrap: wrap">
         <div class="source" style="font-weight: 500">
@@ -174,6 +174,13 @@ src="${value.imageUrl}"
             })
         }
         loadVideos();
+       document.querySelectorAll('.videos .link')
+            .forEach(x => {
+                x.addEventListener('click', evt => {
+                    evt.preventDefault();
+                    navigator.clipboard.writeText(/(?<=\/vi-)[a-zA-Z\d]+/.exec(x.href)[0]);
+                })
+            })
         let start = 50;
         loadData(0, 50);
         document.querySelector('.next').addEventListener('click', evt => {
