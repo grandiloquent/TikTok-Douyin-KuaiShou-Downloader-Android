@@ -105,7 +105,7 @@ std::string GetNewsFeed(const std::string &from, const std::string &size) {
              "from", from,
             },
             {
-             "size",size
+             "size", size
             }
     };
     auto body = js.dump();
@@ -123,10 +123,31 @@ std::string GetNewsVideos() {
     // https://assets.msn.com/service/MSN/Feed/me?$top=30&DisableTypeSerialization=true&activityId=E2756561-0DE1-4B9D-80A0-30F3829D2A98&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentId=AA17ubHB&contentType=video&location=41.2732|-75.8905&query=news%20video&queryType=myfeed&responseSchema=cardview&timeOut=1000&user=m-108D5A0585D565421229482584516419&wrapodata=false
 
     cli.enable_server_certificate_verification(false);
-    httplib::Headers headers = {{
-                                        "User-Agent",
-                                        "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.56 Mobile Safari/537.36"
-                                }};
+    httplib::Headers headers = {
+
+            {"accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"},
+            {"accept-language","en"},
+            {"cache-control","no-cache"},
+            {"cookie","USRLOC=; _EDGE_V=1; MUID=108D5A0585D565421229482584516419; _SS=SID=00; adslrid=_"},
+            {"pragma","no-cache"},
+            {"sec-ch-ua","\"Google Chrome\";v=\"95\", \"Chromium\";v=\"95\", \";Not A Brand\";v=\"99\""},
+            {"sec-ch-ua-arch","\"x86\""},
+            {"sec-ch-ua-bitness","\"64\""},
+            {"sec-ch-ua-full-version","\"95.0.4638.69\""},
+            {"sec-ch-ua-mobile","?0"},
+            {"sec-ch-ua-model","\"\""},
+            {"sec-ch-ua-platform","\"Windows\""},
+            {"sec-ch-ua-platform-version","\"10.0.0\""},
+            {"sec-fetch-dest","document"},
+            {"sec-fetch-mode","navigate"},
+            {"sec-fetch-site","none"},
+            {"sec-fetch-user","?1"},
+            {"upgrade-insecure-requests","1"},
+            {"user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"},
+            {"x-forwarded-for","142.251.43.14"},
+            {"x-real-ip","142.251.43.14"},
+
+    };
 
     if (auto res = cli.Get(
             "/service/MSN/Feed/me?$top=200&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&contentType=video&location=41.2732|-75.8905&query=news%20video&queryType=myfeed",
@@ -136,6 +157,7 @@ std::string GetNewsVideos() {
         return {};
     }
 }
+
 extern "C" JNICALL jboolean Java_cn_kpkpkp_ServerService_startServer(
         JNIEnv *env, jclass obj, jobject context, jstring ip, jint port) {
     const std::string host = jsonparse::jni::Convert<std::string>::from(env, ip);
