@@ -156,11 +156,12 @@
 <div style="flex-grow: 1">
 <a class="link" >
     <div
+    data-href="${value.url}"
         style="-webkit-box-orient: horizontal;flex-direction: row;letter-spacing: .025em;font-family: Roboto,Arial,sans-serif;font-size: .75rem;font-weight: 400;line-height: 1rem;color: #5f6368;display: flex;flex-wrap: wrap">
-        <div class="source" data-href="${value.url}" style="font-weight: 500">
+        <div class="source" style="font-weight: 500">
         ${value.provider.name}
             </div>
-        <div style="display: inline-flex">
+        <div class="subtitle"  style="display: inline-flex">
             ${timeAgo(value.publishedDateTime)}
         </div>
     </div>
@@ -183,7 +184,7 @@ src="${value.images[0].url}" alt="${value.title}"
                 .forEach(x => {
                     x.addEventListener('click', async evt => {
                         evt.preventDefault();
-                        await writeText(/(?<=\/vi-)[a-zA-Z\d]+/.exec(x.dataset.href)[0]);
+                        await writeText(/(?<=\/vi-)[a-zA-Z\d]+/.exec(x.parentNode.dataset.href)[0]);
                     })
                 })
                 document.querySelectorAll('.videos .item-content')
@@ -197,9 +198,20 @@ src="${value.images[0].url}" alt="${value.title}"
                 .forEach(x => {
                     x.addEventListener('click', async evt => {
                         evt.preventDefault();
-                        await writeText(x.alt);
+                        window.open(`https://www.google.com/search?q=${encodeURIComponent(`${x.alt} site:uk.news.yahoo.com`)}`,'_blank')
+                        //await writeText(x.alt);
                     })
                 })
+                document.querySelectorAll('.videos .subtitle')
+                .forEach(x => {
+                    x.addEventListener('click', async evt => {
+                        evt.preventDefault();
+                        window.open(x.parentNode.dataset.href,'_blank')
+                       
+                    })
+                })
+                
+
         }
         loadVideos();
 

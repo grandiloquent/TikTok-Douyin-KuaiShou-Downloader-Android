@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Request;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -203,6 +205,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, ITEM_ID_REFRESH, 0, R.string.refresh);
         menu.add(0, ITEM_ID_OPEN, 0, R.string.open);
+        menu.add(0, 3, 0, "复制");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -215,6 +218,11 @@ public class MainActivity extends Activity {
             case ITEM_ID_OPEN:
                 open();
                 break;
+            case 3:
+                ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                manager.setPrimaryClip(ClipData.newPlainText(null, mWebView.getUrl()));
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
