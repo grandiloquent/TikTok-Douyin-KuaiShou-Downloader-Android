@@ -129,7 +129,7 @@ std::string GetNewsVideos() {
                                 }};
 
     if (auto res = cli.Get(
-            "/service/MSN/Feed/me?$top=200&DisableTypeSerialization=true&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentId=AA17ubHB&contentType=video&location=41.2732|-75.8905&query=news%20video&queryType=myfeed&responseSchema=cardview&timeOut=5000",
+            "$top=200&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&contentType=video&location=41.2732|-75.8905&query=news%20video&queryType=myfeed",
             headers)) {
         return res->body;
     } else {
