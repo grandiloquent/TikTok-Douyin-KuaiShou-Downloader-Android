@@ -48,7 +48,7 @@ async function render(tag) {
     div.style = '-webkit-tap-highlight-color: transparent;border-top: 1px solid #dadce0;padding: 8px 0;min-height: 43px;box-sizing: border-box;display: flex;-webkit-box-pack: justify;justify-content: space-between;-webkit-box-align: center;align-items: center';
     const text = document.createElement('div');
     // .6875rem
-    text.style = `-webkit-tap-highlight-color: transparent;display: flex;-webkit-box-align: center;align-items: center;letter-spacing: .07272727em;font-family: Roboto,Arial,sans-serif;font-size: 14px;font-weight: 500;text-transform: uppercase;color: #5f6368;line-height: .6875rem;margin-right: 8px;white-space: nowrap`;
+    text.style = `-webkit-tap-highlight-color: transparent;display: flex;-webkit-box-align: center;align-items: center;letter-spacing: .07272727em;font-family: Roboto,Arial,sans-serif;font-size: 14px;font-weight: 500;color: #5f6368;line-height: .6875rem;margin-right: 8px;white-space: nowrap`;
     div.appendChild(text);
     text.textContent = x.title;
     this.wrapper.appendChild(div);
@@ -102,7 +102,7 @@ async function onInput(evt) {
       div.style = '-webkit-tap-highlight-color: transparent;border-top: 1px solid #dadce0;padding: 8px 0;min-height: 43px;box-sizing: border-box;display: flex;-webkit-box-pack: justify;justify-content: space-between;-webkit-box-align: center;align-items: center';
       const text = document.createElement('div');
       // .6875rem
-      text.style = `-webkit-tap-highlight-color: transparent;display: flex;-webkit-box-align: center;align-items: center;letter-spacing: .07272727em;font-family: Roboto,Arial,sans-serif;font-size: 14px;font-weight: 500;text-transform: uppercase;color: #5f6368;line-height: .6875rem;margin-right: 8px;white-space: nowrap`;
+      text.style = `-webkit-tap-highlight-color: transparent;display: flex;-webkit-box-align: center;align-items: center;letter-spacing: .07272727em;font-family: Roboto,Arial,sans-serif;font-size: 14px;font-weight: 500;color: #5f6368;line-height: .6875rem;margin-right: 8px;white-space: nowrap`;
       div.appendChild(text);
       text.textContent = x.title;
       this.wrapper.appendChild(div);
