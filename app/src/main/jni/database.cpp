@@ -16,6 +16,11 @@ kp::database::database(std::string &directory) {
         // sqlite3_errmsg
     }
     //sqlite3_exec(note,"delete from tag where name=\"|After Effects\"",nullptr, nullptr, nullptr);
+    sqlite3_exec(note,R"(DELETE from tag where _id in (select t._id FROM tag t
+left join note_tag nt on nt.tag_id =t._id
+left join notes n on n._id=nt.note_id
+group by n._id
+HAVING (count(n._id)==0));)", nullptr, nullptr, nullptr);
 }
 
 std::string kp::database::insertVideo(

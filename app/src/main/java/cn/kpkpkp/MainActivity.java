@@ -2,6 +2,7 @@ package cn.kpkpkp;
 
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Request;
@@ -13,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.hardware.biometrics.BiometricManager.Strings;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build.VERSION;
@@ -28,9 +30,16 @@ import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -206,6 +215,7 @@ public class MainActivity extends Activity {
         menu.add(0, ITEM_ID_REFRESH, 0, R.string.refresh);
         menu.add(0, ITEM_ID_OPEN, 0, R.string.open);
         menu.add(0, 3, 0, "复制");
+        menu.add(0, 4, 0, "下载");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -219,11 +229,62 @@ public class MainActivity extends Activity {
                 open();
                 break;
             case 3:
-                ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                manager.setPrimaryClip(ClipData.newPlainText(null, mWebView.getUrl()));
+                Shared.setText(this, mWebView.getUrl());
+                break;
+            case 4:
+                downloadFolder(Shared.getText(this).toString());
                 break;
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static File getFileName(String uri) {
+        String path = Uri.parse(uri).getQueryParameter("path");
+        String[] parts = path.split("\\\\");
+        path = parts[parts.length - 2];
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), path);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        return new File(dir, parts[parts.length - 1]);
+    }
+
+    public static void downloadFile(String uri) {
+        try {
+            File f = getFileName(uri);
+            URL u = new URL(uri);
+            HttpURLConnection c = (HttpURLConnection) u.openConnection();
+//                c.getHeaderFields().forEach((k, v) -> {
+//                    Log.e("", String.format("downloadFolder, %s,%s", k, v.stream().collect(Collectors.joining(";"))));
+//                });
+            if (f.exists() && f.length() < c.getContentLength()) {
+                f.delete();
+            }
+            if (!f.exists() && VERSION.SDK_INT >= VERSION_CODES.O) {
+                Files.copy(c.getInputStream(), f.toPath());
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void downloadFolder(String uri) {
+        new Thread(() -> {
+            String path = Uri.parse(uri).getQueryParameter("path");
+            Log.e("B5aOx2", String.format("downloadFolder, %s", path));
+            try {
+                URL u = new URL("http://192.168.8.189:8080/api/files?path=" + Uri.encode(path));
+                HttpURLConnection c = (HttpURLConnection) u.openConnection();
+                JSONArray jsonArray = new JSONArray(new BufferedReader(new InputStreamReader(c.getInputStream()))
+                        .lines().collect(Collectors.joining("\n")));
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    if (!jsonArray.getJSONObject(i).getBoolean("isDirectory")) {
+                        String filePath = jsonArray.getJSONObject(i).getString("path");
+                        downloadFile("http://192.168.8.189:8080/api/file?path=" + Uri.encode(filePath));
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }).start();
     }
 }
