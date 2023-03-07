@@ -833,7 +833,7 @@ document.addEventListener('keydown', async evt => {
             evt.preventDefault();
             const p = findCodeBlock(textarea);
             textarea.setRangeText(await navigator.clipboard.readText(), p[0], p[1]);
-        }else if (evt.key === '2') {
+        }else if (evt.key === 'u') {
             evt.preventDefault();
             uploadHanlder(textarea)
         }
