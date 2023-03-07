@@ -833,7 +833,11 @@ document.addEventListener('keydown', async evt => {
             evt.preventDefault();
             const p = findCodeBlock(textarea);
             textarea.setRangeText(await navigator.clipboard.readText(), p[0], p[1]);
+        }else if (evt.key === '2') {
+            evt.preventDefault();
+            uploadHanlder(textarea)
         }
+        
     }
 });
 
@@ -864,7 +868,7 @@ function copyLine(editor, count) {
     const string = editor.value;
     let offsetStart = start;
     while (offsetStart > 0) {
-        if (string[offsetStart - 1] !== '\n')
+        if (string[offsetStart - 1] !== '\n'||string[offsetStart - 1] !== '|')
             offsetStart--;
         else {
             // while (offsetStart > 0) {
@@ -877,7 +881,7 @@ function copyLine(editor, count) {
     }
     let offsetEnd = end;
     while (offsetEnd < string.length) {
-        if (string[offsetEnd + 1] !== '\n')
+        if (string[offsetEnd + 1] !== '\n'||string[offsetEnd + 1] !== '|')
             offsetEnd++;
         else {
             /* while (offsetEnd < string.length) {
