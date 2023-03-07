@@ -650,7 +650,7 @@ function tryUploadImageFromClipboard(success, error) {
                 console.log(blob.then(res => {
                     const formData = new FormData();
                     formData.append("images", res, "1.png");
-                    fetch(`https://lucidu.cn/api/article/2`, {
+                    fetch(`https://lucidu.cn/v1/picture`, {
                         method: "POST", body: formData
                     }).then(res => {
                         return res.text();
@@ -691,7 +691,7 @@ function uploadHanlder(editor) {
 async function uploadImage(image, name) {
     const form = new FormData();
     form.append('images', image, name)
-    const response = await fetch(`https://lucidu.cn/api/article/2`, {
+    const response = await fetch(`https://lucidu.cn/v1/picture`, {
         method: 'POST', body: form
     });
     return await response.text();
